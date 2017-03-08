@@ -1,6 +1,16 @@
 BGP Session Culling IETF Draft Repository
 =========================================
 
+Authoring Conventions
+---------------------
+
+* One sentence per line, this makes diff viewing easiest.
+* Only edit the .xml file (the .txt and .html files are computer generated).
+* Be sure to keep track of the names of contributors through the Acknowledgements section and the git log.
+
+Note Well
+------
+
 This repository relates to activities in the Internet Engineering Task Force
 (IETF). All material in this repository is considered Contributions to the IETF
 Standards Process, as defined in the intellectual property policies of IETF
