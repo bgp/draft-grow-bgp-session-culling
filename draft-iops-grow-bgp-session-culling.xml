@@ -6,11 +6,10 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc
-    category="bcp"
-    ipr="trust200902"
-    docName="draft-wmj-grow-bgp-session-culling-00"
-    submissionType="IETF">
+<rfc category="bcp"
+     ipr="trust200902"
+     docName="draft-iops-grow-bgp-session-culling-00"
+     submissionType="IETF">
 
     <front>
 
@@ -68,7 +67,7 @@
 
         <abstract>
             <t>
-                This document defines ...
+                This document defines an 
             </t>
         </abstract>
 

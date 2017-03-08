@@ -1,0 +1,9 @@
+pip install xml2rfc
+brew install rfcdiff
+
+xml2rfc -o draft-xxxx-yy.txt draft-xxxx.xml
+rfcdiff draft-xxxx-yy.txt draft-xxxx-yy+1.txt
+
+git add *.txt *.html
+git commit -am "Generated txt & rfcdiff html"
+git push
