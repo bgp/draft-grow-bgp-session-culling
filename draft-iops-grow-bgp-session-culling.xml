@@ -85,33 +85,92 @@
     <middle>
         <section anchor="Introduction" title="Introduction">
             <t>
-
-                IP networks use various methods to interconnect their routers to other IP networks, 
-                with each other through various methods 
-
-            <t>
-                Session Culling is the practise of ensuring <xref target="RFC4271">BGP-4</xref> sessions are forcefully torn down, before maintenance activities commence which affect the flow of data between the BGP speakers.
+                In network topologies where BGP speaking routers are directly attached to each other, or use fault detection mechanisms such as <xref target="RFC5880">BFD</xref>, detecting and acting upon a link down event (for example when someone yanks the physical connector) in a timely fashion is straightforward.
             </t>
             <t>
-
-
+                However, in topologies where upper layer fast fault detection mechanisms are unavailable and the lower layer topology is hidden from the BGP speakers, operators rely on BGP Hold Timer Expiration (section 6.5 of <xref target="RFC4271" />) to initiate traffic rerouting.
+                Common BGP Hold Timer values are anywhere between 90 and 180 seconds, which implies there window of 90 to 180 seconds in which traffic blackholing can occur if the lower layer network is not able to forward traffic.
+            </t>
             <t>
-                This specification intends to improve this situation
-                by
-                ....
+                Session Culling is the practise of ensuring BGP sessions are forcefully torn down, before maintenance activities on a lower layer network commence, which otherwise would affect the flow of data between the BGP speakers.
             </t>
         </section>
+        
+        <section title="BGP Session Culling">
+            <t>
+                From the viewpoint of the IP network operator, there are two types of BGP Session Culling:
+                <list style="hanging">
+                    <t hangText="Voluntary BGP Session Teardown:">The operator initiates the tear down of the potentially affected BGP session by issuing an Administrative Shutdown.</t>
+                    <t hangText="Involuntary BGP Session Teardown:">The operator of the lower layer network disrupts BGP control-plane traffic in the upper layer, causing the BGP Hold Timers of the affected BGP session to expire, subsequently triggering rerouting of end user traffic.</t>
+                </list>
+            </t>
+            <section title="Voluntary BGP Session Teardown Recommendations">
+                <t>
+                    Before an operator commences activities which can cause disruption to the flow of data through the lower layer network, an operator would do well to Administratively Shutdown the BGP sessions running across the lower layer network and wait a few minutes for data-plane traffic to subside.
+                </t>
+                <t>
+                    While architectures exist to facilitate quick network reconvergence (such as <xref target="I-D.ietf-rtgwg-bgp-pic">BGP PIC</xref>), an operator cannot assume the remote side has such capabilities.
+                    As such, a grace period between the Administrative Shutdown and the impacting maintenance activities is warranted.
+                </t>
+                <t>
+                    After the maintenance activities have concluded, the operator is expected to restore the BGP sessions to their original Administrative state.
+                </t>
+            </section>
+            <section title="Involuntary BGP Session Teardown Recommendations">
+                <t>
+                    In the case where multilateral interconnection between BGP speakers is facilitated through a switched layer-2 fabric, such as commonly seen at Internet Exchange Points (IXPs), different operational considerations can apply.
+                </t>
+                <t>
+                    In the absence of notifications from the lower layer (e.g. ethernet link down) consistent with the planned maintenance activities in a densely meshed multi-node layer-2 fabric, the caretaker of the fabric could opt to cull BGP sessions on behalf of the stakeholders connected to the fabric.
+                </t>
+                <t>
+                    Such culling of control-plane traffic will pre-empt the loss of end-user traffic, by causing the expiration of BGP Hold Timers ahead of the moment where the expiration would occur without intervention from the fabric's caretaker.
+                </t>
+                <t>
+                    In this scenario, BGP Session Culling is accomplished through the application of a combined layer-3 and layer-4 packet filter deployed in the switched fabric itself.
+                </t>
+            </section>
+            <section title="Involuntary BGP Session Teardown Considerations">
+                <t>
+                    The packet filter should be designed and specified in a way that:
+                    <list style="symbols">
+                        <t>
+                            only affect link-local BGP traffic i.e. forming part of the control plane of the system described, rather than multihop BGP which merely transits
+                        </t>
+                        <t>
+                            only affect BGP, i.e. TCP/179
+                        </t>
+                        <t>
+                            make provision for the bidirectional nature of BGP, i.e. that sessions may be established in either direction
+                        </t>
+                        <t>
+                            affect all relevent AFIs
+                        </t>
+                    </list>
+                <xref target="acl1" /> contains an example of such a packet filter.
+                </t>
+            </section>
+            <section title="Monitoring Considerations">
+                <t>
+                    XXXX
+                    can monitor dataplane traffic and carry out the maintenance without impact to traffic once session culling is complete
+                </t>
+            </section>
 
+        </section>
+
+
+<!-- 
         <section anchor="Acknowledgments" title="Acknowledgments">
             <t>
                 The authors would like to thank the following people for their
                 comments, support and review....
             </t>
         </section>
-
+-->
         <section anchor="Security" title="Security Considerations">
             <t>
-                This document addresses a ....
+                There are no security considerations.
             </t>
         </section>
 
@@ -131,8 +190,39 @@
         </references>
 
         <references title="Informative References">
-            <?rfc include="reference.RFC.7908.xml"?>
+            <?rfc include="reference.I-D.draft-ietf-rtgwg-bgp-pic-01"?>
+            <?rfc include="reference.RFC.5880.xml"?>
         </references>
+
+        <section anchor="acl1" title="Example packet filter for an IPv4 subnet">
+<figure>
+<preamble>
+    Example for an IXP with IPv4 subnet 192.0.2.0/24 on the Peering LAN
+</preamble>
+<artwork><![CDATA[
+entry DenyBGPv4egress {
+  if {
+    source-address 192.0.2.0/24;
+    protocol tcp;
+    source-port 179;
+  } then {
+    deny;
+  }
+}
+entry DenyBGPv4ingress {
+  if {
+    source-address 192.0.2.0/24;
+    protocol tcp;
+    destination-port 179;
+  } then {
+    deny;
+  }
+}
+entry DenyBGPv6e {
+[v6 stuff goes here]
+]]></artwork>
+</figure>
+</section>
 
     </back>
 
