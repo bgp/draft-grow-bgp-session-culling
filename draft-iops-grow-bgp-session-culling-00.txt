@@ -1,0 +1,336 @@
+
+
+
+
+Global Routing Operations                                    W. Hargrave
+Internet-Draft                                                     LONAP
+Intended status: Best Current Practice                       M. Griswold
+Expires: September 11, 2017                                          20C
+                                                             J. Snijders
+                                                                     NTT
+                                                          March 10, 2017
+
+
+ Mitigating Negative Impact of Maintenance through BGP Session Culling
+                 draft-iops-grow-bgp-session-culling-00
+
+Abstract
+
+   This document outlines an approach to mitigate negative impact on
+   networks resulting from maintenance activities.  It includes guidance
+   for both Internet Exchange Points (IXPs) and IP networks.  The
+   approach is to ensure BGP-4 sessions affected by the maintenance are
+   forcefully torn down before the actual maintenance activities
+   commence.
+
+Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on September 11, 2017.
+
+
+
+
+
+
+
+
+Hargrave, et al.       Expires September 11, 2017               [Page 1]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
+Copyright Notice
+
+   Copyright (c) 2017 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  BGP Session Culling . . . . . . . . . . . . . . . . . . . . .   3
+     2.1.  Voluntary BGP Session Teardown Recommendations  . . . . .   3
+     2.2.  Involuntary BGP Session Teardown Recommendations  . . . .   3
+     2.3.  Involuntary BGP Session Teardown Considerations . . . . .   4
+     2.4.  Monitoring Considerations . . . . . . . . . . . . . . . .   4
+   3.  Security Considerations . . . . . . . . . . . . . . . . . . .   4
+   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   4
+   5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   4
+     5.1.  Normative References  . . . . . . . . . . . . . . . . . .   5
+     5.2.  Informative References  . . . . . . . . . . . . . . . . .   5
+   Appendix A.  Example packet filter for an IPv4 subnet . . . . . .   5
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   6
+
+1.  Introduction
+
+   In network topologies where BGP speaking routers are directly
+   attached to each other, or use fault detection mechanisms such as BFD
+   [RFC5880], detecting and acting upon a link down event (for example
+   when someone yanks the physical connector) in a timely fashion is
+   straightforward.
+
+   However, in topologies where upper layer fast fault detection
+   mechanisms are unavailable and the lower layer topology is hidden
+   from the BGP speakers, operators rely on BGP Hold Timer Expiration
+   (section 6.5 of [RFC4271]) to initiate traffic rerouting.  Common BGP
+   Hold Timer values are anywhere between 90 and 180 seconds, which
+   implies there window of 90 to 180 seconds in which traffic
+   blackholing can occur if the lower layer network is not able to
+   forward traffic.
+
+
+
+
+Hargrave, et al.       Expires September 11, 2017               [Page 2]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
+   Session Culling is the practise of ensuring BGP sessions are
+   forcefully torn down, before maintenance activities on a lower layer
+   network commence, which otherwise would affect the flow of data
+   between the BGP speakers.
+
+2.  BGP Session Culling
+
+   From the viewpoint of the IP network operator, there are two types of
+   BGP Session Culling:
+
+   Voluntary BGP Session Teardown:  The operator initiates the tear down
+      of the potentially affected BGP session by issuing an
+      Administrative Shutdown.
+
+   Involuntary BGP Session Teardown:  The operator of the lower layer
+      network disrupts BGP control-plane traffic in the upper layer,
+      causing the BGP Hold Timers of the affected BGP session to expire,
+      subsequently triggering rerouting of end user traffic.
+
+2.1.  Voluntary BGP Session Teardown Recommendations
+
+   Before an operator commences activities which can cause disruption to
+   the flow of data through the lower layer network, an operator would
+   do well to Administratively Shutdown the BGP sessions running across
+   the lower layer network and wait a few minutes for data-plane traffic
+   to subside.
+
+   While architectures exist to facilitate quick network reconvergence
+   (such as BGP PIC [I-D.ietf-rtgwg-bgp-pic]), an operator cannot assume
+   the remote side has such capabilities.  As such, a grace period
+   between the Administrative Shutdown and the impacting maintenance
+   activities is warranted.
+
+   After the maintenance activities have concluded, the operator is
+   expected to restore the BGP sessions to their original Administrative
+   state.
+
+2.2.  Involuntary BGP Session Teardown Recommendations
+
+   In the case where multilateral interconnection between BGP speakers
+   is facilitated through a switched layer-2 fabric, such as commonly
+   seen at Internet Exchange Points (IXPs), different operational
+   considerations can apply.
+
+   In the absence of notifications from the lower layer (e.g. ethernet
+   link down) consistent with the planned maintenance activities in a
+   densely meshed multi-node layer-2 fabric, the caretaker of the fabric
+
+
+
+
+Hargrave, et al.       Expires September 11, 2017               [Page 3]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
+   could opt to cull BGP sessions on behalf of the stakeholders
+   connected to the fabric.
+
+   Such culling of control-plane traffic will pre-empt the loss of end-
+   user traffic, by causing the expiration of BGP Hold Timers ahead of
+   the moment where the expiration would occur without intervention from
+   the fabric's caretaker.
+
+   In this scenario, BGP Session Culling is accomplished through the
+   application of a combined layer-3 and layer-4 packet filter deployed
+   in the switched fabric itself.
+
+2.3.  Involuntary BGP Session Teardown Considerations
+
+   The packet filter should be designed and specified in a way that:
+
+   o  only affect link-local BGP traffic i.e. forming part of the
+      control plane of the system described, rather than multihop BGP
+      which merely transits
+
+   o  only affect BGP, i.e. TCP/179
+
+   o  make provision for the bidirectional nature of BGP, i.e. that
+      sessions may be established in either direction
+
+   o  affect all relevent AFIs
+
+   Appendix A contains an example of such a packet filter.
+
+2.4.  Monitoring Considerations
+
+   XXXX can monitor dataplane traffic and carry out the maintenance
+   without impact to traffic once session culling is complete
+
+3.  Security Considerations
+
+   There are no security considerations.
+
+4.  IANA Considerations
+
+   This document has no actions for IANA.
+
+5.  References
+
+
+
+
+
+
+
+
+Hargrave, et al.       Expires September 11, 2017               [Page 4]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
+5.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <http://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC4271]  Rekhter, Y., Ed., Li, T., Ed., and S. Hares, Ed., "A
+              Border Gateway Protocol 4 (BGP-4)", RFC 4271,
+              DOI 10.17487/RFC4271, January 2006,
+              <http://www.rfc-editor.org/info/rfc4271>.
+
+5.2.  Informative References
+
+   [I-D.ietf-rtgwg-bgp-pic]
+              Bashandy, A., Filsfils, C., and P. Mohapatra, "BGP Prefix
+              Independent Convergence", draft-ietf-rtgwg-bgp-pic-01
+              (work in progress), June 2016.
+
+   [RFC5880]  Katz, D. and D. Ward, "Bidirectional Forwarding Detection
+              (BFD)", RFC 5880, DOI 10.17487/RFC5880, June 2010,
+              <http://www.rfc-editor.org/info/rfc5880>.
+
+Appendix A.  Example packet filter for an IPv4 subnet
+
+   Example for an IXP with IPv4 subnet 192.0.2.0/24 on the Peering LAN
+
+   entry DenyBGPv4egress {
+     if {
+       source-address 192.0.2.0/24;
+       protocol tcp;
+       source-port 179;
+     } then {
+       deny;
+     }
+   }
+   entry DenyBGPv4ingress {
+     if {
+       source-address 192.0.2.0/24;
+       protocol tcp;
+       destination-port 179;
+     } then {
+       deny;
+     }
+   }
+   entry DenyBGPv6e {
+   [v6 stuff goes here]
+
+
+
+
+Hargrave, et al.       Expires September 11, 2017               [Page 5]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
+Authors' Addresses
+
+   Will Hargrave
+   LONAP Ltd
+   5 Fleet Place
+   London  EC4M 7RD
+   United Kingdom
+
+   Email: will@lonap.net
+
+
+   Matt Griswold
+   20C
+   1658 Milwaukee Ave # 100-4506
+   Chicago, IL  60647
+   United States of America
+
+   Email: grizz@20c.com
+
+
+   Job Snijders
+   NTT Communications
+   Theodorus Majofskistraat 100
+   Amsterdam  1065 SZ
+   NL
+
+   Email: job@ntt.net
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Hargrave, et al.       Expires September 11, 2017               [Page 6]
