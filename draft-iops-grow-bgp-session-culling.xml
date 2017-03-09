@@ -115,6 +115,11 @@
                 <t>
                     After the maintenance activities have concluded, the operator is expected to restore the BGP sessions to their original Administrative state.
                 </t>
+                <section title="Maintenance Communication Considerations">
+                    <t>
+                        Initiators of the Administrative Shutdown are encouraged to use <xref target="I-D.ietf-idr-shutdown">Shutdown Communication</xref> to inform the remote side on the nature and duration of the maintenance activities.
+                    </t>
+                </section>
             </section>
             <section title="Involuntary BGP Session Teardown Recommendations">
                 <t>
@@ -129,26 +134,26 @@
                 <t>
                     In this scenario, BGP Session Culling is accomplished through the application of a combined layer-3 and layer-4 packet filter deployed in the switched fabric itself.
                 </t>
-            </section>
-            <section title="Involuntary BGP Session Teardown Considerations">
-                <t>
-                    The packet filter should be designed and specified in a way that:
-                    <list style="symbols">
-                        <t>
-                            only affect link-local BGP traffic i.e. forming part of the control plane of the system described, rather than multihop BGP which merely transits
-                        </t>
-                        <t>
-                            only affect BGP, i.e. TCP/179
-                        </t>
-                        <t>
-                            make provision for the bidirectional nature of BGP, i.e. that sessions may be established in either direction
-                        </t>
-                        <t>
-                            affect all relevent AFIs
-                        </t>
-                    </list>
-                <xref target="acl1" /> contains an example of such a packet filter.
-                </t>
+                <section title="Packet Filter Considerations">
+                    <t>
+                        The packet filter should be designed and specified in a way that:
+                        <list style="symbols">
+                            <t>
+                                only affect link-local BGP traffic i.e. forming part of the control plane of the system described, rather than multihop BGP which merely transits
+                            </t>
+                            <t>
+                                only affect BGP, i.e. TCP/179
+                            </t>
+                            <t>
+                                make provision for the bidirectional nature of BGP, i.e. that sessions may be established in either direction
+                            </t>
+                            <t>
+                                affect all relevent AFIs
+                            </t>
+                        </list>
+                    <xref target="acl1" /> contains an example of such a packet filter.
+                    </t>
+                </section>
             </section>
             <section title="Monitoring Considerations">
                 <t>
@@ -190,6 +195,7 @@
         </references>
 
         <references title="Informative References">
+            <?rfc include="reference.I-D.draft-ietf-idr-shutdown-07"?>
             <?rfc include="reference.I-D.draft-ietf-rtgwg-bgp-pic-01"?>
             <?rfc include="reference.RFC.5880.xml"?>
         </references>
