@@ -101,7 +101,7 @@
                 From the viewpoint of the IP network operator, there are two types of BGP Session Culling:
                 <list style="hanging">
                     <t hangText="Voluntary BGP Session Teardown:">The operator initiates the tear down of the potentially affected BGP session by issuing an Administrative Shutdown.</t>
-                    <t hangText="Involuntary BGP Session Teardown:">The operator of the lower layer network disrupts BGP control-plane traffic in the upper layer, causing the BGP Hold Timers of the affected BGP session to expire, subsequently triggering rerouting of end user traffic.</t>
+                    <t hangText="Involuntary BGP Session Teardown:">The caretaker of the lower layer network disrupts BGP control-plane traffic in the upper layer, causing the BGP Hold Timers of the affected BGP session to expire, subsequently triggering rerouting of end user traffic.</t>
                 </list>
             </t>
             <section title="Voluntary BGP Session Teardown Recommendations">
