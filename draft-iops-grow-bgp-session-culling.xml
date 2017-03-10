@@ -148,7 +148,7 @@
                                 make provision for the bidirectional nature of BGP, i.e. that sessions may be established in either direction
                             </t>
                             <t>
-                                affect all relevent AFIs
+                                affect all relavent AFIs
                             </t>
                         </list>
                     <xref target="acl1" /> contains an example of such a packet filter.
