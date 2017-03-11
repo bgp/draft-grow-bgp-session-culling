@@ -95,7 +95,7 @@
                 Session Culling is the practise of ensuring BGP sessions are forcefully torn down before maintenance activities on a lower layer network commence, which otherwise would affect the flow of data between the BGP speakers.
             </t>
         </section>
-        
+
         <section title="BGP Session Culling">
             <t>
                 From the viewpoint of the IP network operator, there are two types of BGP Session Culling:
@@ -125,7 +125,7 @@
                 <t>
                     In the case where multilateral interconnection between BGP speakers is facilitated through a switched layer-2 fabric, such as commonly seen at Internet Exchange Points (IXPs), different operational considerations can apply.
                 </t>
-                <t> 
+                <t>
                     Operational experience shows many network operators are unable to carry out the Voluntary BGP Session Teardown recommendations, because of the operational cost and risk of co-ordinating the two configuration changes required. This has an adverse affect on Internet performance.
                  </t>
                 <t>
@@ -167,7 +167,7 @@
         </section>
 
 
-<!-- 
+<!--
         <section anchor="Acknowledgments" title="Acknowledgments">
             <t>
                 The authors would like to thank the following people for their
@@ -205,7 +205,7 @@
         <section anchor="acl1" title="Example packet filter for an IPv4 subnet">
 <figure>
 <preamble>
-    Example for an IXP with IPv4 subnet 192.0.2.0/24 on the Peering LAN
+    Example for an IXP with IPv4 subnet 192.0.2.0/24 and IPv6 subnet 2001:db8:2::/64 on the Peering LAN
 </preamble>
 <artwork><![CDATA[
 entry DenyBGPv4egress {
@@ -226,8 +226,24 @@ entry DenyBGPv4ingress {
     deny;
   }
 }
-entry DenyBGPv6e {
-[v6 stuff goes here]
+entry DenyBGPv6egress {
+  if {
+    source-address 2001:db8:2::/64;
+    protocol tcp;
+    source-port 179;
+  } then {
+    deny;
+  }
+}
+entry DenyBGPv6ingress {
+  if {
+    source-address 2001:db8:2::/64;
+    protocol tcp;
+    destination-port 179;
+  } then {
+    deny;
+  }
+}
 ]]></artwork>
 </figure>
 </section>
