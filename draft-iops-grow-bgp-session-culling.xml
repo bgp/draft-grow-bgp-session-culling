@@ -205,7 +205,7 @@
         <section anchor="acl1" title="Example packet filter for an IPv4 subnet">
 <figure>
 <preamble>
-    Example for an IXP with IPv4 subnet 192.0.2.0/24 on the Peering LAN
+    Example for an IXP with IPv4 subnet 192.0.2.0/24 and IPv6 subnet 2001:db8:2::/64 on the Peering LAN
 </preamble>
 <artwork><![CDATA[
 entry DenyBGPv4egress {
@@ -226,8 +226,24 @@ entry DenyBGPv4ingress {
     deny;
   }
 }
-entry DenyBGPv6e {
-[v6 stuff goes here]
+entry DenyBGPv6egress {
+  if {
+    source-address 2001:db8:2::/64;
+    protocol tcp;
+    source-port 179;
+  } then {
+    deny;
+  }
+}
+entry DenyBGPv6ingress {
+  if {
+    source-address 2001:db8:2::/64;
+    protocol tcp;
+    destination-port 179;
+  } then {
+    deny;
+  }
+}
 ]]></artwork>
 </figure>
 </section>
