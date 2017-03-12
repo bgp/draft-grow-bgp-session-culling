@@ -88,7 +88,7 @@ Table of Contents
    6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   5
      6.1.  Normative References  . . . . . . . . . . . . . . . . . .   5
      6.2.  Informative References  . . . . . . . . . . . . . . . . .   5
-   Appendix A.  Example packet filter  . . . . . . . . . . . . . . .   6
+   Appendix A.  Example packet filters . . . . . . . . . . . . . . .   6
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
 
 1.  Introduction
@@ -213,8 +213,8 @@ Internet-Draft             BGP Session Culling                March 2017
 
    o  affect all relavent AFIs
 
-   Appendix A contains an example of such a packet filter.
-
+   Appendix A contains examples of correct packet filters for various
+   platforms.
 
 
 
@@ -234,7 +234,8 @@ Internet-Draft             BGP Session Culling                March 2017
 
 3.  Acknowledgments
 
-   The authors would like to thank the following people: Nick Hilliard.
+   The authors would like to thank the following people for their
+   contributions to this document: Nick Hilliard and Saku Ytti.
 
 4.  Security Considerations
 
@@ -276,15 +277,14 @@ Internet-Draft             BGP Session Culling                March 2017
 
 
 
-
 Hargrave, et al.       Expires September 13, 2017               [Page 5]
 
 Internet-Draft             BGP Session Culling                March 2017
 
 
-Appendix A.  Example packet filter
+Appendix A.  Example packet filters
 
-   Example packet filter for "Involuntary BGP Session Teardown" at an
+   Example packet filters for "Involuntary BGP Session Teardown" at an
    IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
 
    > show configuration firewall family ethernet-switching filter cull
