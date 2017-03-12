@@ -297,6 +297,7 @@ Appendix A.  Example packet filters
            ip-destination-address {
                192.0.2.0/24;
            }
+           ip-protocol tcp;
        }
        then {
            discard;
@@ -312,6 +313,7 @@ Appendix A.  Example packet filters
            ip-destination-address {
                192.0.2.0/24;
            }
+           ip-protocol tcp;
        }
        then {
            discard;
@@ -328,8 +330,6 @@ Appendix A.  Example packet filters
                    }
                    ip6-destination-address {
                        2001:db8:2::/64;
-                   }
-               }
 
 
 
@@ -338,7 +338,10 @@ Hargrave, et al.       Expires September 13, 2017               [Page 6]
 Internet-Draft             BGP Session Culling                March 2017
 
 
+                   }
+               }
            }
+           ip-protocol tcp;
        }
        then {
            discard;
@@ -358,6 +361,7 @@ Internet-Draft             BGP Session Culling                March 2017
                    }
                }
            }
+           ip-protocol tcp;
        }
        then {
            discard;
@@ -369,10 +373,6 @@ Internet-Draft             BGP Session Culling                March 2017
    }
 
    Juniper Junos Layer 2 Firewall Example Configuration
-
-
-
-
 
 
 
