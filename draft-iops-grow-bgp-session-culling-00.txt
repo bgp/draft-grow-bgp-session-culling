@@ -401,6 +401,16 @@ Internet-Draft             BGP Session Culling                March 2017
        then accept;
    }
 
+   > show configuration interfaces xe-0/0/46
+   description "IXP participant affected by maintenance"
+   unit 0 {
+       family ethernet-switching {
+           filter {
+               input cull;
+           }
+       }
+   }
+
    Arista EOS Firewall Example Configuration:
 
    ipv6 access-list acl-ipv6-permit-all-except-bgp
@@ -430,16 +440,6 @@ Authors' Addresses
    Email: will@lonap.net
 
 
-   Matt Griswold
-   20C
-   1658 Milwaukee Ave # 100-4506
-   Chicago, IL  60647
-   United States of America
-
-   Email: grizz@20c.com
-
-
-
 
 
 
@@ -448,6 +448,15 @@ Authors' Addresses
 Hargrave, et al.       Expires September 13, 2017               [Page 8]
 
 Internet-Draft             BGP Session Culling                March 2017
+
+
+   Matt Griswold
+   20C
+   1658 Milwaukee Ave # 100-4506
+   Chicago, IL  60647
+   United States of America
+
+   Email: grizz@20c.com
 
 
    Job Snijders
@@ -466,15 +475,6 @@ Internet-Draft             BGP Session Culling                March 2017
    IE
 
    Email: nick@inex.ie
-
-
-
-
-
-
-
-
-
 
 
 
