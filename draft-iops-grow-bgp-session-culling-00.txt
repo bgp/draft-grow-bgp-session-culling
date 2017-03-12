@@ -87,7 +87,7 @@ Table of Contents
    5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   5
      5.1.  Normative References  . . . . . . . . . . . . . . . . . .   5
      5.2.  Informative References  . . . . . . . . . . . . . . . . .   5
-   Appendix A.  Example packet filter for an IPv4 subnet . . . . . .   5
+   Appendix A.  Example packet filter  . . . . . . . . . . . . . . .   5
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   7
 
 1.  Introduction
@@ -264,16 +264,16 @@ Internet-Draft             BGP Session Culling                March 2017
               (BFD)", RFC 5880, DOI 10.17487/RFC5880, June 2010,
               <http://www.rfc-editor.org/info/rfc5880>.
 
-Appendix A.  Example packet filter for an IPv4 subnet
+Appendix A.  Example packet filter
 
-   Example for an IXP with LAN prefixes 192.0.2.0/24 and
-   2001:db8:2::/64.
+   Example packet filter for "Involuntary BGP Session Teardown" at an
+   IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
 
-   filter bgp_cull {
-       term sourced_by_peeringlan-v4 {
-           from {
-               source-port 179;
-               ip-source-address {
+   > show configuration firewall family ethernet-switching filter cull
+   term sourced_by_peeringlan-v4 {
+       from {
+           source-port 179;
+           ip-source-address {
 
 
 
@@ -282,54 +282,54 @@ Hargrave, et al.       Expires September 13, 2017               [Page 5]
 Internet-Draft             BGP Session Culling                March 2017
 
 
-                   192.0.2.0/24;
-               }
+               192.0.2.0/24;
            }
-           then {
-               count bgp_cull;
-               discard;
+           ip-destination-address {
+               192.0.2.0/24;
            }
        }
-       term towards_peeringlan-v4 {
-           from {
-               destination-port 179;
-               ip-destination-address {
-                   192.0.2.0/24;
-               }
+       then {
+           discard;
+           count bgp_cull;
+       }
+   }
+   term towards_peeringlan-v4 {
+       from {
+           destination-port 179;
+           ip-source-address {
+               192.0.2.0/24;
            }
-           then {
-               count bgp_cull;
-               discard;
+           ip-destination-address {
+               192.0.2.0/24;
            }
        }
-       term sourced_by_peeringlan-v6 {
-           from {
-               source-port 179;
-               ip-version {
-                   ipv6 {
-                       ip6-source-address {
-                           2001:db8:2::/64;
-                       }
+       then {
+           discard;
+           count bgp_cull;
+       }
+   }
+   term sourced_by_peeringlan-v6 {
+       from {
+           source-port 179;
+           ip-version {
+               ipv6 {
+                   ip6-source-address {
+                       2001:db8:2::/64;
+                   }
+                   ip6-destination-address {
+                       2001:db8:2::/64;
                    }
                }
            }
-           then {
-               count bgp_cull;
-               discard;
-           }
        }
-       term towards_peeringlan-v6 {
-           from {
-               destination-port 179;
-               ip-version {
-                   ipv6 {
-                       ip6-destination-address {
-                           2001:db8:2::/64;
-                       }
-                   }
-               }
-           }
-           then {
+       then {
+           discard;
+           count bgp_cull;
+       }
+   }
+   term towards_peeringlan-v6 {
+       from {
+           destination-port 179;
 
 
 
@@ -338,16 +338,27 @@ Hargrave, et al.       Expires September 13, 2017               [Page 6]
 Internet-Draft             BGP Session Culling                March 2017
 
 
-               count bgp_cull;
-               discard;
+           ip-version {
+               ipv6 {
+                   ip6-source-address {
+                       2001:db8:2::/64;
+                   }
+                   ip6-destination-address {
+                       2001:db8:2::/64;
+                   }
+               }
            }
        }
-       term rest {
-           then accept;
+       then {
+           discard;
+           count bgp_cull;
        }
    }
+   term rest {
+       then accept;
+   }
 
-   Junos Layer 2 Firewall example
+   Juniper Junos Layer 2 Firewall Example Configuration
 
 Authors' Addresses
 
@@ -367,6 +378,20 @@ Authors' Addresses
    United States of America
 
    Email: grizz@20c.com
+
+
+
+
+
+
+
+
+
+
+
+Hargrave, et al.       Expires September 13, 2017               [Page 7]
+
+Internet-Draft             BGP Session Culling                March 2017
 
 
    Job Snijders
@@ -389,4 +414,35 @@ Authors' Addresses
 
 
 
-Hargrave, et al.       Expires September 13, 2017               [Page 7]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Hargrave, et al.       Expires September 13, 2017               [Page 8]

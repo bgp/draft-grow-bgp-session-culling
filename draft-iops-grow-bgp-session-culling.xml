@@ -202,13 +202,13 @@
             <?rfc include="reference.RFC.5880.xml"?>
         </references>
 
-        <section anchor="acl1" title="Example packet filter for an IPv4 subnet">
+        <section anchor="acl1" title="Example packet filter">
 <figure>
 <preamble>
-    Example BGP Session Culling packet filter for an IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
+    Example packet filter for "Involuntary BGP Session Teardown" at an IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
 </preamble>
 <artwork><![CDATA[
-user@switch> show configuration firewall family ethernet-switching filter bgpculling
+> show configuration firewall family ethernet-switching filter cull
 term sourced_by_peeringlan-v4 {
     from {
         source-port 179;
@@ -282,7 +282,7 @@ term rest {
 }    
 ]]></artwork>
 <postamble>
-    Juniper Junos Layer 2 Firewall Example
+    Juniper Junos Layer 2 Firewall Example Configuration
 </postamble>
 </figure>
 </section>
