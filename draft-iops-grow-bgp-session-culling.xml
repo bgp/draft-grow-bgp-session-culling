@@ -240,6 +240,9 @@
                 Example packet filters for "Involuntary BGP Session Teardown" at an IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
             </t>
 <figure>
+    <preamble>
+        Juniper Junos Layer 2 Firewall Example Configuration:
+    </preamble>
 <artwork><![CDATA[
 > show configuration firewall family ethernet-switching filter cull
 term towards_peeringlan-v4 {
@@ -313,13 +316,23 @@ term from_peeringlan-v6 {
 term rest {
     then accept;
 }
+
+> show configuration interfaces xe-0/0/46
+description "IXP participant affected by maintenance"
+unit 0 {
+    family ethernet-switching {
+        filter {
+            input cull;
+        }
+    }
+}
 ]]></artwork>
-<postamble>
-    Juniper Junos Layer 2 Firewall Example Configuration
-</postamble>
 </figure>
 
 <figure>
+<preamble>
+    Arista EOS Firewall Example Configuration:
+</preamble>
 <artwork><![CDATA[
 ipv6 access-list acl-ipv6-permit-all-except-bgp
    10 deny tcp 2001:db8:2::/64 eq bgp 2001:db8:2::/64
@@ -337,9 +350,6 @@ interface Ethernet33
    ipv6 access-group acl-ipv6-permit-all-except-bgp in
 !
 ]]></artwork>
-<postamble>
-    Arista EOS Firewall Example Configuration
-</postamble>
 </figure>
 
         </section>
