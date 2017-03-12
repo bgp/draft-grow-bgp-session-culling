@@ -206,63 +206,46 @@
 <figure>
 <artwork><![CDATA[
 > show configuration firewall family ethernet-switching filter cull
-term sourced_by_peeringlan-v4 {
-    from {
-        source-port 179;
-        ip-source-address {
-            192.0.2.0/24;
-        }
-        ip-destination-address {
-            192.0.2.0/24;
-        }
-        ip-protocol tcp;
-    }
-    then {
-        discard;
-        count bgp_cull;
-    }
-}
 term towards_peeringlan-v4 {
     from {
-        destination-port 179;
-        ip-source-address {
-            192.0.2.0/24;
-        }
-        ip-destination-address {
-            192.0.2.0/24;
-        }
-        ip-protocol tcp;
-    }
-    then {
-        discard;
-        count bgp_cull;
-    }
-}
-term sourced_by_peeringlan-v6 {
-    from {
-        source-port 179;
         ip-version {
-            ipv6 {
-                ip6-source-address {
-                    2001:db8:2::/64;
+            ipv4 {
+                destination-port bgp;
+                ip-source-address {
+                    192.0.2.0/24;
                 }
-                ip6-destination-address {
-                    2001:db8:2::/64;
+                ip-destination-address {
+                    192.0.2.0/24;
                 }
+                ip-protocol tcp;
             }
         }
-        ip-protocol tcp;
     }
-    then {
-        discard;
-        count bgp_cull;
+    then discard;
+}
+term from_peeringlan-v4 {
+    from {
+        ip-version {
+            ipv4 {
+                source-port bgp;
+                ip-source-address {
+                    192.0.2.0/24;
+                }
+                ip-destination-address {
+                    192.0.2.0/24;
+                }
+                ip-protocol tcp;
+            }
+        }
     }
+    then discard;
 }
 term towards_peeringlan-v6 {
     from {
-        destination-port 179;
         ip-version {
             ipv6 {
+                next-header tcp;
+                destination-port bgp;
                 ip6-source-address {
                     2001:db8:2::/64;
                 }
@@ -271,16 +254,29 @@ term towards_peeringlan-v6 {
                 }
             }
         }
-        ip-protocol tcp;
     }
-    then {
-        discard;
-        count bgp_cull;
+    then discard;
+}
+term from_peeringlan-v6 {
+    from {
+        ip-version {
+            ipv6 {
+                next-header tcp;
+                source-port bgp;
+                ip6-source-address {
+                    2001:db8:2::/64;
+                }
+                ip6-destination-address {
+                    2001:db8:2::/64;
+                }
+            }
+        }
     }
+    then discard;
 }
 term rest {
     then accept;
-}    
+}
 ]]></artwork>
 <postamble>
     Juniper Junos Layer 2 Firewall Example Configuration
