@@ -208,43 +208,71 @@
     Example for an IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
 </preamble>
 <artwork><![CDATA[
-entry DenyBGPv4egress {
-  if {
-    source-address 192.0.2.0/24;
-    protocol tcp;
-    source-port 179;
-  } then {
-    deny;
-  }
-}
-entry DenyBGPv4ingress {
-  if {
-    source-address 192.0.2.0/24;
-    protocol tcp;
-    destination-port 179;
-  } then {
-    deny;
-  }
-}
-entry DenyBGPv6egress {
-  if {
-    source-address 2001:db8:2::/64;
-    protocol tcp;
-    source-port 179;
-  } then {
-    deny;
-  }
-}
-entry DenyBGPv6ingress {
-  if {
-    source-address 2001:db8:2::/64;
-    protocol tcp;
-    destination-port 179;
-  } then {
-    deny;
-  }
+filter bgp_cull {
+    term sourced_by_peeringlan-v4 {
+        from {
+            source-port 179;
+            ip-source-address {
+                192.0.2.0/24;
+            }
+        }
+        then {
+            count bgp_cull;
+            discard;
+        }
+    }
+    term towards_peeringlan-v4 {
+        from {
+            destination-port 179;
+            ip-destination-address {
+                192.0.2.0/24;
+            }
+        }
+        then {
+            count bgp_cull;
+            discard;
+        }
+    }
+    term sourced_by_peeringlan-v6 {
+        from {
+            source-port 179;
+            ip-version {
+                ipv6 {
+                    ip6-source-address {
+                        2001:db8:2::/64;
+                    }
+                }
+            }
+        }
+        then {
+            count bgp_cull;
+            discard;
+        }
+    }
+    term towards_peeringlan-v6 {
+        from {
+            destination-port 179;
+            ip-version {
+                ipv6 {
+                    ip6-destination-address {
+                        2001:db8:2::/64;
+                    }
+                }
+            }
+        }
+        then {
+            count bgp_cull;
+            discard;
+        }
+    }
+    term rest {
+        then accept;
+    }
 }
 ]]></artwork>
+<postamble>
+    Junos Layer 2 Firewall example
+</postamble>
 </figure>
 </section>
 
