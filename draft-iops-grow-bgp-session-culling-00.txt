@@ -78,10 +78,12 @@ Table of Contents
    3.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .   5
    4.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
    5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
-   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   5
+   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   6
      6.1.  Normative References  . . . . . . . . . . . . . . . . . .   6
      6.2.  Informative References  . . . . . . . . . . . . . . . . .   6
    Appendix A.  Example packet filters . . . . . . . . . . . . . . .   6
+     A.1.  Juniper Junos Layer 2 Firewall Example Configuration  . .   6
+     A.2.  Arista EOS Firewall Example Configuration . . . . . . . .   8
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
 
 1.  Introduction
@@ -103,8 +105,6 @@ Table of Contents
 
    BGP Session Culling is the practice of ensuring BGP sessions are
    forcefully torn down before maintenance activities on a lower layer
-   network commence, which otherwise would affect the flow of data
-   between the BGP speakers.
 
 
 
@@ -113,6 +113,9 @@ Hargrave, et al.       Expires September 13, 2017               [Page 2]
 
 Internet-Draft             BGP Session Culling                March 2017
 
+
+   network commence, which otherwise would affect the flow of data
+   between the BGP speakers.
 
 2.  BGP Session Culling
 
@@ -159,9 +162,6 @@ Internet-Draft             BGP Session Culling                March 2017
    seen at Internet Exchange Points (IXPs), different operational
    considerations can apply.
 
-   Operational experience shows many network operators are unable to
-   carry out the Voluntary BGP Session Teardown recommendations, because
-   of the operational cost and risk of co-ordinating the two
 
 
 
@@ -170,6 +170,9 @@ Hargrave, et al.       Expires September 13, 2017               [Page 3]
 Internet-Draft             BGP Session Culling                March 2017
 
 
+   Operational experience shows many network operators are unable to
+   carry out the Voluntary BGP Session Teardown recommendations, because
+   of the operational cost and risk of co-ordinating the two
    configuration changes required.  This has an adverse affect on
    Internet performance.
 
@@ -214,10 +217,7 @@ Internet-Draft             BGP Session Culling                March 2017
    failures may occur during filter deployment which may cause
    unexpected result.  These problems may include:
 
-   o  Platform inability to apply layer 3/4 filters on ports which
-      already have layer 2 filters applied.
 
-   o  Layer 3/4 filters supported for IPv4 but not for IPv6.
 
 
 
@@ -225,6 +225,11 @@ Hargrave, et al.       Expires September 13, 2017               [Page 4]
 
 Internet-Draft             BGP Session Culling                March 2017
 
+
+   o  Platform inability to apply layer 3/4 filters on ports which
+      already have layer 2 filters applied.
+
+   o  Layer 3/4 filters supported for IPv4 but not for IPv6.
 
    o  Layer 3/4 filters supported on physical ports, but not on 802.3ad
       Link Aggregate ports.
@@ -258,7 +263,7 @@ Internet-Draft             BGP Session Culling                March 2017
 3.  Acknowledgments
 
    The authors would like to thank the following people for their
-   contributions to this document: Nick Hilliard and Saku Ytti.
+   contributions to this document: Saku Ytti.
 
 4.  Security Considerations
 
@@ -268,11 +273,6 @@ Internet-Draft             BGP Session Culling                March 2017
 
    This document has no actions for IANA.
 
-6.  References
-
-
-
-
 
 
 
@@ -281,6 +281,8 @@ Hargrave, et al.       Expires September 13, 2017               [Page 5]
 
 Internet-Draft             BGP Session Culling                March 2017
 
+
+6.  References
 
 6.1.  Normative References
 
@@ -310,7 +312,7 @@ Appendix A.  Example packet filters
    Example packet filters for "Involuntary BGP Session Teardown" at an
    IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
 
-   Juniper Junos Layer 2 Firewall Example Configuration:
+A.1.  Juniper Junos Layer 2 Firewall Example Configuration
 
    > show configuration firewall family ethernet-switching filter cull
    term towards_peeringlan-v4 {
@@ -328,8 +330,6 @@ Appendix A.  Example packet filters
                }
            }
        }
-       then discard;
-   }
 
 
 
@@ -338,6 +338,8 @@ Hargrave, et al.       Expires September 13, 2017               [Page 6]
 Internet-Draft             BGP Session Culling                March 2017
 
 
+       then discard;
+   }
    term from_peeringlan-v4 {
        from {
            ip-version {
@@ -384,8 +386,6 @@ Internet-Draft             BGP Session Culling                March 2017
                    ip6-destination-address {
                        2001:db8:2::/64;
                    }
-               }
-           }
 
 
 
@@ -394,6 +394,8 @@ Hargrave, et al.       Expires September 13, 2017               [Page 7]
 Internet-Draft             BGP Session Culling                March 2017
 
 
+               }
+           }
        }
        then discard;
    }
@@ -411,7 +413,7 @@ Internet-Draft             BGP Session Culling                March 2017
        }
    }
 
-   Arista EOS Firewall Example Configuration:
+A.2.  Arista EOS Firewall Example Configuration
 
    ipv6 access-list acl-ipv6-permit-all-except-bgp
       10 deny tcp 2001:db8:2::/64 eq bgp 2001:db8:2::/64
@@ -438,8 +440,6 @@ Authors' Addresses
    United Kingdom
 
    Email: will@lonap.net
-
-
 
 
 

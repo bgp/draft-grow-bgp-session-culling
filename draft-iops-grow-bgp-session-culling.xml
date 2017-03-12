@@ -49,7 +49,7 @@
                     <street>Theodorus Majofskistraat 100</street>
                     <code>1065 SZ</code>
                     <city>Amsterdam</city>
-                    <country>NL</country>
+                    <country>The Netherlands</country>
                 </postal>
                 <email>job@ntt.net</email>
             </address>
@@ -62,7 +62,7 @@
                     <street>4027 Kingswood Road</street>
                     <city>Dublin</city>
                     <code>24</code>
-                    <country>IE</country>
+                    <country>Ireland</country>
                 </postal>
                 <email>nick@inex.ie</email>
             </address>
@@ -205,7 +205,7 @@
 
         <section anchor="Acknowledgments" title="Acknowledgments">
             <t>
-                The authors would like to thank the following people for their contributions to this document: Nick Hilliard and Saku Ytti.
+                The authors would like to thank the following people for their contributions to this document: Saku Ytti.
             </t>
         </section>
 
@@ -239,10 +239,8 @@
             <t>
                 Example packet filters for "Involuntary BGP Session Teardown" at an IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
             </t>
+<section title="Juniper Junos Layer 2 Firewall Example Configuration">
 <figure>
-    <preamble>
-        Juniper Junos Layer 2 Firewall Example Configuration:
-    </preamble>
 <artwork><![CDATA[
 > show configuration firewall family ethernet-switching filter cull
 term towards_peeringlan-v4 {
@@ -328,11 +326,9 @@ unit 0 {
 }
 ]]></artwork>
 </figure>
-
+</section>
+<section title="Arista EOS Firewall Example Configuration">
 <figure>
-<preamble>
-    Arista EOS Firewall Example Configuration:
-</preamble>
 <artwork><![CDATA[
 ipv6 access-list acl-ipv6-permit-all-except-bgp
    10 deny tcp 2001:db8:2::/64 eq bgp 2001:db8:2::/64
@@ -351,6 +347,7 @@ interface Ethernet33
 !
 ]]></artwork>
 </figure>
+</section>
 
         </section>
     </back>
