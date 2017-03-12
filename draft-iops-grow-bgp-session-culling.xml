@@ -155,7 +155,7 @@
                                 make provision for the bidirectional nature of BGP, i.e. that sessions may be established in either direction
                             </t>
                             <t>
-                                affect all relevent AFIs
+                                affect all relevant AFIs
                             </t>
                         </list>
                     <xref target="acl1" /> contains examples of correct packet filters for various platforms.
