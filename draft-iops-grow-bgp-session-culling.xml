@@ -205,73 +205,84 @@
         <section anchor="acl1" title="Example packet filter for an IPv4 subnet">
 <figure>
 <preamble>
-    Example for an IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
+    Example BGP Session Culling packet filter for an IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
 </preamble>
 <artwork><![CDATA[
-filter bgp_cull {
-    term sourced_by_peeringlan-v4 {
-        from {
-            source-port 179;
-            ip-source-address {
-                192.0.2.0/24;
-            }
+user@switch> show configuration firewall family ethernet-switching filter bgpculling
+term sourced_by_peeringlan-v4 {
+    from {
+        source-port 179;
+        ip-source-address {
+            192.0.2.0/24;
         }
-        then {
-            count bgp_cull;
-            discard;
+        ip-destination-address {
+            192.0.2.0/24;
         }
     }
-    term towards_peeringlan-v4 {
-        from {
-            destination-port 179;
-            ip-destination-address {
-                192.0.2.0/24;
-            }
-        }
-        then {
-            count bgp_cull;
-            discard;
-        }
-    }
-    term sourced_by_peeringlan-v6 {
-        from {
-            source-port 179;
-            ip-version {
-                ipv6 {
-                    ip6-source-address {
-                        2001:db8:2::/64;
-                    }
-                }
-            }
-        }
-        then {
-            count bgp_cull;
-            discard;
-        }
-    }
-    term towards_peeringlan-v6 {
-        from {
-            destination-port 179;
-            ip-version {
-                ipv6 {
-                    ip6-destination-address {
-                        2001:db8:2::/64;
-                    }
-                }
-            }
-        }
-        then {
-            count bgp_cull;
-            discard;
-        }
-    }
-    term rest {
-        then accept;
+    then {
+        discard;
+        count bgp_cull;
     }
 }
+term towards_peeringlan-v4 {
+    from {
+        destination-port 179;
+        ip-source-address {
+            192.0.2.0/24;
+        }
+        ip-destination-address {
+            192.0.2.0/24;
+        }
+    }
+    then {
+        discard;
+        count bgp_cull;
+    }
+}
+term sourced_by_peeringlan-v6 {
+    from {
+        source-port 179;
+        ip-version {
+            ipv6 {
+                ip6-source-address {
+                    2001:db8:2::/64;
+                }
+                ip6-destination-address {
+                    2001:db8:2::/64;
+                }
+            }
+        }
+    }
+    then {
+        discard;
+        count bgp_cull;
+    }
+}
+term towards_peeringlan-v6 {
+    from {
+        destination-port 179;
+        ip-version {
+            ipv6 {
+                ip6-source-address {
+                    2001:db8:2::/64;
+                }
+                ip6-destination-address {
+                    2001:db8:2::/64;
+                }
+            }
+        }
+    }
+    then {
+        discard;
+        count bgp_cull;
+    }
+}
+term rest {
+    then accept;
+}    
 ]]></artwork>
 <postamble>
-    Junos Layer 2 Firewall example
+    Juniper Junos Layer 2 Firewall Example
 </postamble>
 </figure>
 </section>
