@@ -199,9 +199,9 @@
             <?rfc include="reference.RFC.5880.xml"?>
         </references>
 
-        <section anchor="acl1" title="Example packet filter">
+        <section anchor="acl1" title="Example packet filters">
             <t>
-                Example packet filter for "Involuntary BGP Session Teardown" at an IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
+                Example packet filters for "Involuntary BGP Session Teardown" at an IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
             </t>
 <figure>
 <artwork><![CDATA[
