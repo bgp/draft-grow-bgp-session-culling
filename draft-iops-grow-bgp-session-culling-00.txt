@@ -79,16 +79,17 @@ Table of Contents
    2.  BGP Session Culling . . . . . . . . . . . . . . . . . . . . .   3
      2.1.  Voluntary BGP Session Teardown Recommendations  . . . . .   3
        2.1.1.  Maintenance Communication Considerations  . . . . . .   3
-     2.2.  Involuntary BGP Session Teardown Recommendations  . . . .   3
+     2.2.  Involuntary BGP Session Teardown Recommendations  . . . .   4
        2.2.1.  Packet Filter Considerations  . . . . . . . . . . . .   4
-     2.3.  Monitoring Considerations . . . . . . . . . . . . . . . .   4
-   3.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
-   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
-   5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   5
-     5.1.  Normative References  . . . . . . . . . . . . . . . . . .   5
-     5.2.  Informative References  . . . . . . . . . . . . . . . . .   5
-   Appendix A.  Example packet filter  . . . . . . . . . . . . . . .   5
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   7
+     2.3.  Monitoring Considerations . . . . . . . . . . . . . . . .   5
+   3.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .   5
+   4.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
+   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
+   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   5
+     6.1.  Normative References  . . . . . . . . . . . . . . . . . .   5
+     6.2.  Informative References  . . . . . . . . . . . . . . . . .   5
+   Appendix A.  Example packet filter  . . . . . . . . . . . . . . .   6
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
 
 1.  Introduction
 
@@ -104,8 +105,7 @@ Table of Contents
    (section 6.5 of [RFC4271]) to initiate traffic rerouting.  Common BGP
    Hold Timer values are anywhere between 90 and 180 seconds, which
    implies a window of 90 to 180 seconds during which traffic
-   blackholing will occur if the lower layer network is not able to
-   forward traffic.
+
 
 
 
@@ -113,6 +113,9 @@ Hargrave, et al.       Expires September 13, 2017               [Page 2]
 
 Internet-Draft             BGP Session Culling                March 2017
 
+
+   blackholing will occur if the lower layer network is not able to
+   forward traffic.
 
    BGP Session Culling is the practise of ensuring BGP sessions are
    forcefully torn down before maintenance activities on a lower layer
@@ -157,10 +160,7 @@ Internet-Draft             BGP Session Culling                March 2017
    Shutdown Communication [I-D.ietf-idr-shutdown] to inform the remote
    side on the nature and duration of the maintenance activities.
 
-2.2.  Involuntary BGP Session Teardown Recommendations
 
-   In the case where multilateral interconnection between BGP speakers
-   is facilitated through a switched layer-2 fabric, such as commonly
 
 
 
@@ -170,6 +170,10 @@ Hargrave, et al.       Expires September 13, 2017               [Page 3]
 Internet-Draft             BGP Session Culling                March 2017
 
 
+2.2.  Involuntary BGP Session Teardown Recommendations
+
+   In the case where multilateral interconnection between BGP speakers
+   is facilitated through a switched layer-2 fabric, such as commonly
    seen at Internet Exchange Points (IXPs), different operational
    considerations can apply.
 
@@ -211,11 +215,7 @@ Internet-Draft             BGP Session Culling                March 2017
 
    Appendix A contains an example of such a packet filter.
 
-2.3.  Monitoring Considerations
 
-   The caretaker of the lower layer can monitor dataplane traffic (e.g.
-   interface counters) and carry out the maintenance without impact to
-   traffic once session culling is complete.
 
 
 
@@ -226,17 +226,27 @@ Hargrave, et al.       Expires September 13, 2017               [Page 4]
 Internet-Draft             BGP Session Culling                March 2017
 
 
-3.  Security Considerations
+2.3.  Monitoring Considerations
+
+   The caretaker of the lower layer can monitor dataplane traffic (e.g.
+   interface counters) and carry out the maintenance without impact to
+   traffic once session culling is complete.
+
+3.  Acknowledgments
+
+   The authors would like to thank the following people: Nick Hilliard.
+
+4.  Security Considerations
 
    There are no security considerations.
 
-4.  IANA Considerations
+5.  IANA Considerations
 
    This document has no actions for IANA.
 
-5.  References
+6.  References
 
-5.1.  Normative References
+6.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -248,7 +258,7 @@ Internet-Draft             BGP Session Culling                March 2017
               DOI 10.17487/RFC4271, January 2006,
               <http://www.rfc-editor.org/info/rfc4271>.
 
-5.2.  Informative References
+6.2.  Informative References
 
    [I-D.ietf-idr-shutdown]
               Snijders, J., Heitz, J., and J. Scudder, "BGP
@@ -264,6 +274,14 @@ Internet-Draft             BGP Session Culling                March 2017
               (BFD)", RFC 5880, DOI 10.17487/RFC5880, June 2010,
               <http://www.rfc-editor.org/info/rfc5880>.
 
+
+
+
+Hargrave, et al.       Expires September 13, 2017               [Page 5]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
 Appendix A.  Example packet filter
 
    Example packet filter for "Involuntary BGP Session Teardown" at an
@@ -274,14 +292,6 @@ Appendix A.  Example packet filter
        from {
            source-port 179;
            ip-source-address {
-
-
-
-Hargrave, et al.       Expires September 13, 2017               [Page 5]
-
-Internet-Draft             BGP Session Culling                March 2017
-
-
                192.0.2.0/24;
            }
            ip-destination-address {
@@ -320,6 +330,14 @@ Internet-Draft             BGP Session Culling                March 2017
                        2001:db8:2::/64;
                    }
                }
+
+
+
+Hargrave, et al.       Expires September 13, 2017               [Page 6]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
            }
        }
        then {
@@ -330,14 +348,6 @@ Internet-Draft             BGP Session Culling                March 2017
    term towards_peeringlan-v6 {
        from {
            destination-port 179;
-
-
-
-Hargrave, et al.       Expires September 13, 2017               [Page 6]
-
-Internet-Draft             BGP Session Culling                March 2017
-
-
            ip-version {
                ipv6 {
                    ip6-source-address {
@@ -360,6 +370,48 @@ Internet-Draft             BGP Session Culling                March 2017
 
    Juniper Junos Layer 2 Firewall Example Configuration
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Hargrave, et al.       Expires September 13, 2017               [Page 7]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
+   ipv6 access-list acl-ipv6-permit-all-except-bgp
+      10 deny tcp 2001:db8:2::/64 eq bgp 2001:db8:2::/64
+      20 deny tcp 2001:db8:2::/64 2001:db8:2::/64 eq bgp
+      30 permit ipv6 any any
+   !
+   ip access-list acl-ipv4-permit-all-except-bgp
+      10 deny tcp 192.0.2.0/24 eq bgp 192.0.2.0/24
+      20 deny tcp 192.0.2.0/24 192.0.2.0/24 eq bgp
+      30 permit ip any any
+   !
+   interface Ethernet33
+      description IXP participant affected by maintenance
+      ip access-group acl-ipv4-permit-all-except-bgp in
+      ipv6 access-group acl-ipv6-permit-all-except-bgp in
+   !
+
+   Arista EOS Firewall Example Configuration
+
 Authors' Addresses
 
    Will Hargrave
@@ -380,20 +432,6 @@ Authors' Addresses
    Email: grizz@20c.com
 
 
-
-
-
-
-
-
-
-
-
-Hargrave, et al.       Expires September 13, 2017               [Page 7]
-
-Internet-Draft             BGP Session Culling                March 2017
-
-
    Job Snijders
    NTT Communications
    Theodorus Majofskistraat 100
@@ -401,44 +439,6 @@ Internet-Draft             BGP Session Culling                March 2017
    NL
 
    Email: job@ntt.net
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

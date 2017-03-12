@@ -166,15 +166,12 @@
 
         </section>
 
-
-<!--
         <section anchor="Acknowledgments" title="Acknowledgments">
             <t>
-                The authors would like to thank the following people for their
-                comments, support and review....
+                The authors would like to thank the following people: Nick Hilliard.
             </t>
         </section>
--->
+
         <section anchor="Security" title="Security Considerations">
             <t>
                 There are no security considerations.
@@ -203,10 +200,10 @@
         </references>
 
         <section anchor="acl1" title="Example packet filter">
+            <t>
+                Example packet filter for "Involuntary BGP Session Teardown" at an IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
+            </t>
 <figure>
-<preamble>
-    Example packet filter for "Involuntary BGP Session Teardown" at an IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
-</preamble>
 <artwork><![CDATA[
 > show configuration firewall family ethernet-switching filter cull
 term sourced_by_peeringlan-v4 {
@@ -285,8 +282,30 @@ term rest {
     Juniper Junos Layer 2 Firewall Example Configuration
 </postamble>
 </figure>
-</section>
 
+<figure>
+<artwork><![CDATA[
+ipv6 access-list acl-ipv6-permit-all-except-bgp
+   10 deny tcp 2001:db8:2::/64 eq bgp 2001:db8:2::/64
+   20 deny tcp 2001:db8:2::/64 2001:db8:2::/64 eq bgp
+   30 permit ipv6 any any
+!
+ip access-list acl-ipv4-permit-all-except-bgp
+   10 deny tcp 192.0.2.0/24 eq bgp 192.0.2.0/24
+   20 deny tcp 192.0.2.0/24 192.0.2.0/24 eq bgp
+   30 permit ip any any
+!
+interface Ethernet33
+   description IXP participant affected by maintenance
+   ip access-group acl-ipv4-permit-all-except-bgp in
+   ipv6 access-group acl-ipv6-permit-all-except-bgp in
+!
+]]></artwork>
+<postamble>
+    Arista EOS Firewall Example Configuration
+</postamble>
+</figure>
+
+        </section>
     </back>
-
 </rfc>
