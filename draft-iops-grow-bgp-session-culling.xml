@@ -92,7 +92,7 @@
                 Common BGP Hold Timer values are anywhere between 90 and 180 seconds, which implies a window of 90 to 180 seconds during which traffic blackholing will occur if the lower layer network is not able to forward traffic.
             </t>
             <t>
-                Session Culling is the practise of ensuring BGP sessions are forcefully torn down before maintenance activities on a lower layer network commence, which otherwise would affect the flow of data between the BGP speakers.
+                BGP Session Culling is the practise of ensuring BGP sessions are forcefully torn down before maintenance activities on a lower layer network commence, which otherwise would affect the flow of data between the BGP speakers.
             </t>
         </section>
 
