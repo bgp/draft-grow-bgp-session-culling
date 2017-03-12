@@ -68,7 +68,7 @@
         <abstract>
             <t>
                 This document outlines an approach to mitigate negative impact on networks resulting from maintenance activities.
-                It includes guidance for both Internet Exchange Points (IXPs) and IP networks.
+                It includes guidance for both IP networks and Internet Exchange Points (IXPs).
                 The approach is to ensure BGP-4 sessions affected by the maintenance are forcefully torn down before the actual maintenance activities commence.
             </t>
         </abstract>
@@ -205,7 +205,7 @@
         <section anchor="acl1" title="Example packet filter for an IPv4 subnet">
 <figure>
 <preamble>
-    Example for an IXP with IPv4 subnet 192.0.2.0/24 and IPv6 subnet 2001:db8:2::/64 on the Peering LAN
+    Example for an IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
 </preamble>
 <artwork><![CDATA[
 entry DenyBGPv4egress {
