@@ -201,7 +201,7 @@ Internet-Draft             BGP Session Culling                March 2017
    o  make provision for the bidirectional nature of BGP, i.e. that
       sessions may be established in either direction
 
-   o  affect all relevent AFIs
+   o  affect all relevant AFIs
 
    Appendix A contains examples of correct packet filters for various
    platforms.
@@ -251,7 +251,7 @@ Internet-Draft             BGP Session Culling                March 2017
 
 2.3.  Monitoring Considerations
 
-   The caretaker of the lower layer can monitor dataplane traffic (e.g.
+   The caretaker of the lower layer can monitor data-plane traffic (e.g.
    interface counters) and carry out the maintenance without impact to
    traffic once session culling is complete.
 

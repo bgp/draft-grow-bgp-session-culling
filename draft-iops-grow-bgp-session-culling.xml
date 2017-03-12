@@ -197,7 +197,7 @@
             </section>
             <section title="Monitoring Considerations">
                 <t>
-                    The caretaker of the lower layer can monitor dataplane traffic (e.g. interface counters) and carry out the maintenance without impact to traffic once session culling is complete.
+                    The caretaker of the lower layer can monitor data-plane traffic (e.g. interface counters) and carry out the maintenance without impact to traffic once session culling is complete.
                 </t>
             </section>
 
