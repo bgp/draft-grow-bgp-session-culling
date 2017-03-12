@@ -463,7 +463,7 @@ Internet-Draft             BGP Session Culling                March 2017
    NTT Communications
    Theodorus Majofskistraat 100
    Amsterdam  1065 SZ
-   NL
+   The Netherlands
 
    Email: job@ntt.net
 
@@ -472,7 +472,7 @@ Internet-Draft             BGP Session Culling                March 2017
    INEX
    4027 Kingswood Road
    Dublin  24
-   IE
+   Ireland
 
    Email: nick@inex.ie
 
