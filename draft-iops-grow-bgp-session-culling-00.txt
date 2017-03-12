@@ -8,6 +8,8 @@ Intended status: Best Current Practice                       M. Griswold
 Expires: September 13, 2017                                          20C
                                                              J. Snijders
                                                                      NTT
+                                                             N. Hilliard
+                                                                    INEX
                                                           March 12, 2017
 
 
@@ -22,12 +24,6 @@ Abstract
    approach is to ensure BGP-4 sessions affected by the maintenance are
    forcefully torn down before the actual maintenance activities
    commence.
-
-Requirements Language
-
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-   document are to be interpreted as described in RFC 2119 [RFC2119].
 
 Status of This Memo
 
@@ -46,18 +42,6 @@ Status of This Memo
 
    This Internet-Draft will expire on September 13, 2017.
 
-
-
-
-
-
-
-
-Hargrave, et al.       Expires September 13, 2017               [Page 1]
-
-Internet-Draft             BGP Session Culling                March 2017
-
-
 Copyright Notice
 
    Copyright (c) 2017 IETF Trust and the persons identified as the
@@ -66,6 +50,14 @@ Copyright Notice
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents
    (http://trustee.ietf.org/license-info) in effect on the date of
+
+
+
+Hargrave, et al.       Expires September 13, 2017               [Page 1]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
    to this document.  Code Components extracted from this document must
@@ -79,15 +71,16 @@ Table of Contents
    2.  BGP Session Culling . . . . . . . . . . . . . . . . . . . . .   3
      2.1.  Voluntary BGP Session Teardown Recommendations  . . . . .   3
        2.1.1.  Maintenance Communication Considerations  . . . . . .   3
-     2.2.  Involuntary BGP Session Teardown Recommendations  . . . .   4
+     2.2.  Involuntary BGP Session Teardown Recommendations  . . . .   3
        2.2.1.  Packet Filter Considerations  . . . . . . . . . . . .   4
+       2.2.2.  Hardware Considerations . . . . . . . . . . . . . . .   4
      2.3.  Monitoring Considerations . . . . . . . . . . . . . . . .   5
    3.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .   5
    4.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
    5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
    6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   5
-     6.1.  Normative References  . . . . . . . . . . . . . . . . . .   5
-     6.2.  Informative References  . . . . . . . . . . . . . . . . .   5
+     6.1.  Normative References  . . . . . . . . . . . . . . . . . .   6
+     6.2.  Informative References  . . . . . . . . . . . . . . . . .   6
    Appendix A.  Example packet filters . . . . . . . . . . . . . . .   6
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
 
@@ -105,6 +98,13 @@ Table of Contents
    (section 6.5 of [RFC4271]) to initiate traffic rerouting.  Common BGP
    Hold Timer values are anywhere between 90 and 180 seconds, which
    implies a window of 90 to 180 seconds during which traffic
+   blackholing will occur if the lower layer network is not able to
+   forward traffic.
+
+   BGP Session Culling is the practice of ensuring BGP sessions are
+   forcefully torn down before maintenance activities on a lower layer
+   network commence, which otherwise would affect the flow of data
+   between the BGP speakers.
 
 
 
@@ -113,14 +113,6 @@ Hargrave, et al.       Expires September 13, 2017               [Page 2]
 
 Internet-Draft             BGP Session Culling                March 2017
 
-
-   blackholing will occur if the lower layer network is not able to
-   forward traffic.
-
-   BGP Session Culling is the practise of ensuring BGP sessions are
-   forcefully torn down before maintenance activities on a lower layer
-   network commence, which otherwise would affect the flow of data
-   between the BGP speakers.
 
 2.  BGP Session Culling
 
@@ -160,16 +152,6 @@ Internet-Draft             BGP Session Culling                March 2017
    Shutdown Communication [I-D.ietf-idr-shutdown] to inform the remote
    side on the nature and duration of the maintenance activities.
 
-
-
-
-
-
-Hargrave, et al.       Expires September 13, 2017               [Page 3]
-
-Internet-Draft             BGP Session Culling                March 2017
-
-
 2.2.  Involuntary BGP Session Teardown Recommendations
 
    In the case where multilateral interconnection between BGP speakers
@@ -180,6 +162,14 @@ Internet-Draft             BGP Session Culling                March 2017
    Operational experience shows many network operators are unable to
    carry out the Voluntary BGP Session Teardown recommendations, because
    of the operational cost and risk of co-ordinating the two
+
+
+
+Hargrave, et al.       Expires September 13, 2017               [Page 3]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
    configuration changes required.  This has an adverse affect on
    Internet performance.
 
@@ -211,13 +201,23 @@ Internet-Draft             BGP Session Culling                March 2017
    o  make provision for the bidirectional nature of BGP, i.e. that
       sessions may be established in either direction
 
-   o  affect all relavent AFIs
+   o  affect all relevent AFIs
 
    Appendix A contains examples of correct packet filters for various
    platforms.
 
+2.2.2.  Hardware Considerations
 
+   Not all hardware is capable of deploying layer 3 / layer 4 filters on
+   layer 2 ports, and even on platforms which support the feature,
+   documented limitations may exist or hardware resource allocation
+   failures may occur during filter deployment which may cause
+   unexpected result.  These problems may include:
 
+   o  Platform inability to apply layer 3/4 filters on ports which
+      already have layer 2 filters applied.
+
+   o  Layer 3/4 filters supported for IPv4 but not for IPv6.
 
 
 
@@ -225,6 +225,29 @@ Hargrave, et al.       Expires September 13, 2017               [Page 4]
 
 Internet-Draft             BGP Session Culling                March 2017
 
+
+   o  Layer 3/4 filters supported on physical ports, but not on 802.3ad
+      Link Aggregate ports.
+
+   o  Failure of the operator to apply filters to all 802.3ad Link
+      Aggregate ports
+
+   o  Limitations in ACL hardware mechanisms causing filters not to be
+      applied.
+
+   o  Fragmentation of ACL lookup memory causing transient ACL
+      application problems which are resolved after ACL removal /
+      reapplication.
+
+   o  Temporary service loss during hardware programming
+
+   o  Reduction in hardware ACL capacity if the platform enables
+      lossless ACL application.
+
+   It is advisable for the operator to be aware of the limitations of
+   their hardware, and to thoroughly test all complicated configurations
+   in advance to ensure that problems don't occur during production
+   deployments.
 
 2.3.  Monitoring Considerations
 
@@ -247,12 +270,19 @@ Internet-Draft             BGP Session Culling                March 2017
 
 6.  References
 
-6.1.  Normative References
 
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <http://www.rfc-editor.org/info/rfc2119>.
+
+
+
+
+
+
+Hargrave, et al.       Expires September 13, 2017               [Page 5]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
+6.1.  Normative References
 
    [RFC4271]  Rekhter, Y., Ed., Li, T., Ed., and S. Hares, Ed., "A
               Border Gateway Protocol 4 (BGP-4)", RFC 4271,
@@ -275,61 +305,31 @@ Internet-Draft             BGP Session Culling                March 2017
               (BFD)", RFC 5880, DOI 10.17487/RFC5880, June 2010,
               <http://www.rfc-editor.org/info/rfc5880>.
 
-
-
-Hargrave, et al.       Expires September 13, 2017               [Page 5]
-
-Internet-Draft             BGP Session Culling                March 2017
-
-
 Appendix A.  Example packet filters
 
    Example packet filters for "Involuntary BGP Session Teardown" at an
    IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
 
    > show configuration firewall family ethernet-switching filter cull
-   term sourced_by_peeringlan-v4 {
-       from {
-           source-port 179;
-           ip-source-address {
-               192.0.2.0/24;
-           }
-           ip-destination-address {
-               192.0.2.0/24;
-           }
-           ip-protocol tcp;
-       }
-       then {
-           discard;
-           count bgp_cull;
-       }
-   }
    term towards_peeringlan-v4 {
        from {
-           destination-port 179;
-           ip-source-address {
-               192.0.2.0/24;
-           }
-           ip-destination-address {
-               192.0.2.0/24;
-           }
-           ip-protocol tcp;
-       }
-       then {
-           discard;
-           count bgp_cull;
-       }
-   }
-   term sourced_by_peeringlan-v6 {
-       from {
-           source-port 179;
            ip-version {
-               ipv6 {
-                   ip6-source-address {
-                       2001:db8:2::/64;
+               ipv4 {
+                   destination-port bgp;
+                   ip-source-address {
+                       192.0.2.0/24;
                    }
-                   ip6-destination-address {
-                       2001:db8:2::/64;
+                   ip-destination-address {
+                       192.0.2.0/24;
+                   }
+                   ip-protocol tcp;
+               }
+           }
+       }
+       then discard;
+   }
+   term from_peeringlan-v4 {
+       from {
 
 
 
@@ -338,21 +338,27 @@ Hargrave, et al.       Expires September 13, 2017               [Page 6]
 Internet-Draft             BGP Session Culling                March 2017
 
 
+           ip-version {
+               ipv4 {
+                   source-port bgp;
+                   ip-source-address {
+                       192.0.2.0/24;
                    }
+                   ip-destination-address {
+                       192.0.2.0/24;
+                   }
+                   ip-protocol tcp;
                }
            }
-           ip-protocol tcp;
        }
-       then {
-           discard;
-           count bgp_cull;
-       }
+       then discard;
    }
    term towards_peeringlan-v6 {
        from {
-           destination-port 179;
            ip-version {
                ipv6 {
+                   next-header tcp;
+                   destination-port bgp;
                    ip6-source-address {
                        2001:db8:2::/64;
                    }
@@ -361,31 +367,25 @@ Internet-Draft             BGP Session Culling                March 2017
                    }
                }
            }
-           ip-protocol tcp;
        }
-       then {
-           discard;
-           count bgp_cull;
+       then discard;
+   }
+   term from_peeringlan-v6 {
+       from {
+           ip-version {
+               ipv6 {
+                   next-header tcp;
+                   source-port bgp;
+                   ip6-source-address {
+                       2001:db8:2::/64;
+                   }
+                   ip6-destination-address {
+                       2001:db8:2::/64;
+                   }
+               }
+           }
        }
-   }
-   term rest {
-       then accept;
-   }
-
-   Juniper Junos Layer 2 Firewall Example Configuration
-
-
-
-
-
-
-
-
-
-
-
-
-
+       then discard;
 
 
 
@@ -393,6 +393,13 @@ Hargrave, et al.       Expires September 13, 2017               [Page 7]
 
 Internet-Draft             BGP Session Culling                March 2017
 
+
+   }
+   term rest {
+       then accept;
+   }
+
+   Juniper Junos Layer 2 Firewall Example Configuration
 
    ipv6 access-list acl-ipv6-permit-all-except-bgp
       10 deny tcp 2001:db8:2::/64 eq bgp 2001:db8:2::/64
@@ -432,6 +439,17 @@ Authors' Addresses
    Email: grizz@20c.com
 
 
+
+
+
+
+
+
+Hargrave, et al.       Expires September 13, 2017               [Page 8]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
    Job Snijders
    NTT Communications
    Theodorus Majofskistraat 100
@@ -441,8 +459,46 @@ Authors' Addresses
    Email: job@ntt.net
 
 
+   Nick Hilliard
+   INEX
+   4027 Kingswood Road
+   Dublin  24
+   IE
+
+   Email: nick@inex.ie
 
 
 
 
-Hargrave, et al.       Expires September 13, 2017               [Page 8]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Hargrave, et al.       Expires September 13, 2017               [Page 9]

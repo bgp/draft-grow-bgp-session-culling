@@ -42,7 +42,6 @@
             </address>
         </author>
 
-
         <author fullname="Job Snijders" initials="J." surname="Snijders">
             <organization abbrev="NTT">NTT Communications</organization>
             <address>
@@ -85,15 +84,7 @@
                 The approach is to ensure BGP-4 sessions affected by the maintenance are forcefully torn down before the actual maintenance activities commence.
             </t>
         </abstract>
-
-        <note title="Requirements Language">
-            <t>
-                The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <xref target="RFC2119">RFC 2119</xref>.
-            </t>
-        </note>
-
     </front>
-
 
     <middle>
         <section anchor="Introduction" title="Introduction">
@@ -172,7 +163,8 @@
                 </section>
                 <section title="Hardware Considerations">
                     <t>
-                        Not all hardware is capable of deploying layer 3 / layer 4 filters on layer 2 ports, and even on platforms which support the feature, documented limitations may exist or hardware resource allocation failures may occur during filter deployment which may cause unexpected result.  These problems may include:
+                        Not all hardware is capable of deploying layer 3 / layer 4 filters on layer 2 ports, and even on platforms which support the feature, documented limitations may exist or hardware resource allocation failures may occur during filter deployment which may cause unexpected result.
+                        These problems may include:
                         <list style="symbols">
                             <t>
                                 Platform inability to apply layer 3/4 filters on ports which already have layer 2 filters applied.
@@ -234,7 +226,6 @@
     <back>
 
         <references title="Normative References">
-            <?rfc include="reference.RFC.2119.xml"?>
             <?rfc include="reference.RFC.4271.xml"?>
         </references>
 
