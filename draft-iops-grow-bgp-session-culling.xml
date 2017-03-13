@@ -232,6 +232,7 @@
     <back>
 
         <references title="Normative References">
+            <?rfc include="reference.RFC.2119.xml"?>
             <?rfc include="reference.RFC.4271.xml"?>
         </references>
 
@@ -333,7 +334,7 @@ unit 0 {
 ]]></artwork>
 </figure>
 </section>
-<section title="Cisco IOS XR & Arista EOS Firewall Example Configuration">
+<section title="Cisco IOS XR &amp; Arista EOS Firewall Example Configuration">
 <figure>
 <artwork><![CDATA[
 ipv6 access-list acl-ipv6-permit-all-except-bgp
