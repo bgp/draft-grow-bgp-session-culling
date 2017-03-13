@@ -100,6 +100,12 @@
             </t>
         </section>
 
+		<section title="Requirements Language">
+			<t>
+                The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <xref target="RFC2119">RFC 2119</xref>.
+            </t>
+        </section>
+
         <section title="BGP Session Culling">
             <t>
                 From the viewpoint of the IP network operator, there are two types of BGP Session Culling:
@@ -146,16 +152,16 @@
                         The following considerations apply to the packet filter design:
                         <list style="symbols">
                             <t>
-                                The packet filter must only affect BGP traffic specific to the layer-2 fabric, i.e. forming part of the control plane of the system described, rather than multihop BGP traffic which merely transits
+                                The packet filter MUST only affect BGP traffic specific to the layer-2 fabric, i.e. forming part of the control plane of the system described, rather than multihop BGP traffic which merely transits
                             </t>
                             <t>
-                                The packet filter must only affect BGP, i.e. TCP/179
+                                The packet filter MUST only affect BGP, i.e. TCP/179
                             </t>
                             <t>
-                                The packet filter should make provision for the bidirectional nature of BGP, i.e. that sessions may be established in either direction
+                                The packet filter SHOULD make provision for the bidirectional nature of BGP, i.e. that sessions may be established in either direction
                             </t>
                             <t>
-                                The packet filter must affect all relevant AFIs
+                                The packet filter MUST affect all relevant AFIs
                             </t>
                         </list>
                     <xref target="acl1" /> contains examples of correct packet filters for various platforms.
@@ -327,7 +333,7 @@ unit 0 {
 ]]></artwork>
 </figure>
 </section>
-<section title="Arista EOS Firewall Example Configuration">
+<section title="Cisco IOS XR & Arista EOS Firewall Example Configuration">
 <figure>
 <artwork><![CDATA[
 ipv6 access-list acl-ipv6-permit-all-except-bgp
