@@ -110,7 +110,7 @@
             </t>
             <section title="Voluntary BGP Session Teardown Recommendations">
                 <t>
-                    Before an operator commences activities which can cause disruption to the flow of data through the lower layer network, an operator would do well to Administratively Shutdown the BGP sessions running across the lower layer network and wait a few minutes for data-plane traffic to subside.
+                    Before an operator commences activities which can cause disruption to the flow of data through the lower layer network, an operator can reduce loss of traffic by issuing an Administratively Shutdown to all BGP sessions running across the lower layer network and wait a few minutes for data-plane traffic to subside.
                 </t>
                 <t>
                     While architectures exist to facilitate quick network reconvergence (such as <xref target="I-D.ietf-rtgwg-bgp-pic">BGP PIC</xref>), an operator cannot assume the remote side has such capabilities.
@@ -143,19 +143,19 @@
                 </t>
                 <section title="Packet Filter Considerations">
                     <t>
-                        The packet filter should be designed and specified in a way that:
+                        The following considerations apply to the packet filter design:
                         <list style="symbols">
                             <t>
-                                only affect link-local BGP traffic i.e. forming part of the control plane of the system described, rather than multihop BGP which merely transits
+                                The packet filter should only affect BGP traffic specific to the layer-2 fabric, i.e. forming part of the control plane of the system described, rather than multihop BGP traffic which merely transits
                             </t>
                             <t>
-                                only affect BGP, i.e. TCP/179
+                                The packet filter only affect BGP, i.e. TCP/179
                             </t>
                             <t>
-                                make provision for the bidirectional nature of BGP, i.e. that sessions may be established in either direction
+                                The packet filter should make provision for the bidirectional nature of BGP, i.e. that sessions may be established in either direction
                             </t>
                             <t>
-                                affect all relevant AFIs
+                                The packet filter should affect all relevant AFIs
                             </t>
                         </list>
                     <xref target="acl1" /> contains examples of correct packet filters for various platforms.
@@ -163,32 +163,32 @@
                 </section>
                 <section title="Hardware Considerations">
                     <t>
-                        Not all hardware is capable of deploying layer 3 / layer 4 filters on layer 2 ports, and even on platforms which support the feature, documented limitations may exist or hardware resource allocation failures may occur during filter deployment which may cause unexpected result.
+                        Not all hardware is capable of deploying layer 3 / layer 4 filters on layer 2 ports, and even on platforms which support the feature, documented limitations may exist or hardware resource allocation failures may occur during filter deployment which may cause unexpected results.
                         These problems may include:
                         <list style="symbols">
                             <t>
-                                Platform inability to apply layer 3/4 filters on ports which already have layer 2 filters applied.
+                                Platform inability to apply layer 3/4 filters on ports which already have layer 2 filters applied
                             </t>
                             <t>
-                                Layer 3/4 filters supported for IPv4 but not for IPv6.
+                                Layer 3/4 filters supported for IPv4 but not for IPv6
                             </t>
                             <t>
-                                Layer 3/4 filters supported on physical ports, but not on 802.3ad Link Aggregate ports.
+                                Layer 3/4 filters supported on physical ports, but not on 802.3ad Link Aggregate ports
                             </t>
                             <t>
                                 Failure of the operator to apply filters to all 802.3ad Link Aggregate ports
                             </t>
                             <t>
-                                Limitations in ACL hardware mechanisms causing filters not to be applied.
+                                Limitations in ACL hardware mechanisms causing filters not to be applied
                             </t>
                             <t>
-                                Fragmentation of ACL lookup memory causing transient ACL application problems which are resolved after ACL removal / reapplication.
+                                Fragmentation of ACL lookup memory causing transient ACL application problems which are resolved after ACL removal / reapplication
                             </t>
                             <t>
                                 Temporary service loss during hardware programming
                             </t>
                             <t>
-                                Reduction in hardware ACL capacity if the platform enables lossless ACL application.
+                                Reduction in hardware ACL capacity if the platform enables lossless ACL application
                             </t>
                         </list>
                         It is advisable for the operator to be aware of the limitations of their hardware, and to thoroughly test all complicated configurations in advance to ensure that problems don't occur during production deployments.
@@ -205,7 +205,7 @@
 
         <section anchor="Acknowledgments" title="Acknowledgments">
             <t>
-                The authors would like to thank the following people for their contributions to this document: Saku Ytti, and Greg Hankins.
+                The authors would like to thank the following people for their contributions to this document: Saku Ytti, Greg Hankins, and James Bensley.
             </t>
         </section>
 
