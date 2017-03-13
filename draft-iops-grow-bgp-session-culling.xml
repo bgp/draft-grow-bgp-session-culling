@@ -205,6 +205,9 @@
                 <t>
                     The caretaker of the lower layer can monitor data-plane traffic (e.g. interface counters) and carry out the maintenance without impact to traffic once session culling is complete.
                 </t>
+		<t>
+                    It is NOT RECOMMENDED that the packet filters are left in place for long periods of time without further maintenance occurring. This is because an operator may begin to carry out troubleshooting, unaware that this methodology is being used.
+                </t>
             </section>
 
         </section>
