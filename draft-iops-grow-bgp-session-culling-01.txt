@@ -77,7 +77,7 @@ Table of Contents
      2.3.  Monitoring Considerations . . . . . . . . . . . . . . . .   5
    3.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .   5
    4.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
-   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
+   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
    6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   6
      6.1.  Normative References  . . . . . . . . . . . . . . . . . .   6
      6.2.  Informative References  . . . . . . . . . . . . . . . . .   6
@@ -134,10 +134,10 @@ Internet-Draft             BGP Session Culling                March 2017
 2.1.  Voluntary BGP Session Teardown Recommendations
 
    Before an operator commences activities which can cause disruption to
-   the flow of data through the lower layer network, an operator would
-   do well to Administratively Shutdown the BGP sessions running across
-   the lower layer network and wait a few minutes for data-plane traffic
-   to subside.
+   the flow of data through the lower layer network, an operator can
+   reduce loss of traffic by issuing an Administratively Shutdown to all
+   BGP sessions running across the lower layer network and wait a few
+   minutes for data-plane traffic to subside.
 
    While architectures exist to facilitate quick network reconvergence
    (such as BGP PIC [I-D.ietf-rtgwg-bgp-pic]), an operator cannot assume
@@ -193,18 +193,20 @@ Internet-Draft             BGP Session Culling                March 2017
 
 2.2.1.  Packet Filter Considerations
 
-   The packet filter should be designed and specified in a way that:
+   The following considerations apply to the packet filter design:
 
-   o  only affect link-local BGP traffic i.e. forming part of the
-      control plane of the system described, rather than multihop BGP
-      which merely transits
+   o  The packet filter should only affect BGP traffic specific to the
+      layer-2 fabric, i.e. forming part of the control plane of the
+      system described, rather than multihop BGP traffic which merely
+      transits
 
-   o  only affect BGP, i.e. TCP/179
+   o  The packet filter only affect BGP, i.e. TCP/179
 
-   o  make provision for the bidirectional nature of BGP, i.e. that
-      sessions may be established in either direction
+   o  The packet filter should make provision for the bidirectional
+      nature of BGP, i.e. that sessions may be established in either
+      direction
 
-   o  affect all relevant AFIs
+   o  The packet filter should affect all relevant AFIs
 
    Appendix A contains examples of correct packet filters for various
    platforms.
@@ -215,9 +217,7 @@ Internet-Draft             BGP Session Culling                March 2017
    layer 2 ports, and even on platforms which support the feature,
    documented limitations may exist or hardware resource allocation
    failures may occur during filter deployment which may cause
-   unexpected result.  These problems may include:
-
-
+   unexpected results.  These problems may include:
 
 
 
@@ -227,27 +227,27 @@ Internet-Draft             BGP Session Culling                March 2017
 
 
    o  Platform inability to apply layer 3/4 filters on ports which
-      already have layer 2 filters applied.
+      already have layer 2 filters applied
 
-   o  Layer 3/4 filters supported for IPv4 but not for IPv6.
+   o  Layer 3/4 filters supported for IPv4 but not for IPv6
 
    o  Layer 3/4 filters supported on physical ports, but not on 802.3ad
-      Link Aggregate ports.
+      Link Aggregate ports
 
    o  Failure of the operator to apply filters to all 802.3ad Link
       Aggregate ports
 
    o  Limitations in ACL hardware mechanisms causing filters not to be
-      applied.
+      applied
 
    o  Fragmentation of ACL lookup memory causing transient ACL
       application problems which are resolved after ACL removal /
-      reapplication.
+      reapplication
 
    o  Temporary service loss during hardware programming
 
    o  Reduction in hardware ACL capacity if the platform enables
-      lossless ACL application.
+      lossless ACL application
 
    It is advisable for the operator to be aware of the limitations of
    their hardware, and to thoroughly test all complicated configurations
@@ -263,15 +263,15 @@ Internet-Draft             BGP Session Culling                March 2017
 3.  Acknowledgments
 
    The authors would like to thank the following people for their
-   contributions to this document: Saku Ytti, and Greg Hankins.
+   contributions to this document: Saku Ytti, Greg Hankins, and James
+   Bensley.
 
 4.  Security Considerations
 
    There are no security considerations.
 
-5.  IANA Considerations
 
-   This document has no actions for IANA.
+
 
 
 
@@ -281,6 +281,10 @@ Hargrave, et al.       Expires September 14, 2017               [Page 5]
 
 Internet-Draft             BGP Session Culling                March 2017
 
+
+5.  IANA Considerations
+
+   This document has no actions for IANA.
 
 6.  References
 
@@ -326,10 +330,6 @@ A.1.  Juniper Junos Layer 2 Firewall Example Configuration
                    ip-destination-address {
                        192.0.2.0/24;
                    }
-                   ip-protocol tcp;
-               }
-           }
-       }
 
 
 
@@ -338,6 +338,10 @@ Hargrave, et al.       Expires September 14, 2017               [Page 6]
 Internet-Draft             BGP Session Culling                March 2017
 
 
+                   ip-protocol tcp;
+               }
+           }
+       }
        then discard;
    }
    term from_peeringlan-v4 {
@@ -382,10 +386,6 @@ Internet-Draft             BGP Session Culling                March 2017
                    source-port bgp;
                    ip6-source-address {
                        2001:db8:2::/64;
-                   }
-                   ip6-destination-address {
-                       2001:db8:2::/64;
-                   }
 
 
 
@@ -394,6 +394,10 @@ Hargrave, et al.       Expires September 14, 2017               [Page 7]
 Internet-Draft             BGP Session Culling                March 2017
 
 
+                   }
+                   ip6-destination-address {
+                       2001:db8:2::/64;
+                   }
                }
            }
        }
@@ -432,10 +436,6 @@ A.2.  Arista EOS Firewall Example Configuration
    !
 
 A.3.  Nokia SR OS Filter Example Configuration
-
-
-
-
 
 
 
