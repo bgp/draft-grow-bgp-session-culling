@@ -205,7 +205,7 @@
 
         <section anchor="Acknowledgments" title="Acknowledgments">
             <t>
-                The authors would like to thank the following people for their contributions to this document: Saku Ytti.
+                The authors would like to thank the following people for their contributions to this document: Saku Ytti, and Greg Hankins.
             </t>
         </section>
 
@@ -316,7 +316,7 @@ term rest {
 }
 
 > show configuration interfaces xe-0/0/46
-description "IXP participant affected by maintenance"
+description "IXP Participant Affected by Maintenance"
 unit 0 {
     family ethernet-switching {
         filter {
@@ -341,14 +341,56 @@ ip access-list acl-ipv4-permit-all-except-bgp
    30 permit ip any any
 !
 interface Ethernet33
-   description IXP participant affected by maintenance
+   description IXP Participant Affected by Maintenance
    ip access-group acl-ipv4-permit-all-except-bgp in
    ipv6 access-group acl-ipv6-permit-all-except-bgp in
 !
 ]]></artwork>
 </figure>
 </section>
+<section title="Nokia SR OS Filter Example Configuration">
+<figure>
+<artwork><![CDATA[
+ip-filter 10 create
+    filter-name "ACL IPv4 Permit All Except BGP"
+    default-action forward
+    entry 10 create
+        match protocol tcp
+            dst-ip 192.0.2.0/24
+            src-ip 192.0.2.0/24
+            port eq 179
+        exit
+        action
+            drop
+        exit
+    exit
+exit
 
+ipv6-filter 10 create
+    filter-name "ACL IPv6 Permit All Except BGP"
+    default-action forward
+    entry 10 create
+        match next-header tcp
+            dst-ip 2001:db8:2::/64
+            src-ip 2001:db8:2::/64
+            port eq 179
+        exit
+        action
+            drop
+        exit
+    exit
+exit
+
+interface "port-1/1/1"
+    description "IXP Participant Affected by Maintenance"
+    ingress
+        filter ip 10
+        filter ipv6 10
+    exit
+exit
+]]></artwork>
+</figure>
+            </section>
         </section>
     </back>
 </rfc>
