@@ -214,7 +214,7 @@
 
         <section anchor="Acknowledgments" title="Acknowledgments">
             <t>
-                The authors would like to thank the following people for their contributions to this document: Saku Ytti, Greg Hankins, James Bensley and Wolfgang Tremmel.
+                The authors would like to thank the following people for their contributions to this document: Saku Ytti, Greg Hankins, James Bensley, Wolfgang Tremmel and Daniel Rösen.
             </t>
         </section>
 
@@ -253,11 +253,11 @@
 <figure>
 <artwork><![CDATA[
 > show configuration firewall family ethernet-switching filter cull
-term towards_peeringlan-v4 {
+term cull-v4 {
     from {
         ip-version {
             ipv4 {
-                destination-port bgp;
+                port bgp;
                 ip-source-address {
                     192.0.2.0/24;
                 }
@@ -270,46 +270,12 @@ term towards_peeringlan-v4 {
     }
     then discard;
 }
-term from_peeringlan-v4 {
-    from {
-        ip-version {
-            ipv4 {
-                source-port bgp;
-                ip-source-address {
-                    192.0.2.0/24;
-                }
-                ip-destination-address {
-                    192.0.2.0/24;
-                }
-                ip-protocol tcp;
-            }
-        }
-    }
-    then discard;
-}
-term towards_peeringlan-v6 {
+term cull-v6 {
     from {
         ip-version {
             ipv6 {
                 next-header tcp;
-                destination-port bgp;
-                ip6-source-address {
-                    2001:db8:2::/64;
-                }
-                ip6-destination-address {
-                    2001:db8:2::/64;
-                }
-            }
-        }
-    }
-    then discard;
-}
-term from_peeringlan-v6 {
-    from {
-        ip-version {
-            ipv6 {
-                next-header tcp;
-                source-port bgp;
+                port bgp;
                 ip6-source-address {
                     2001:db8:2::/64;
                 }
