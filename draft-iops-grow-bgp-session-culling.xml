@@ -125,9 +125,9 @@
                 <t>
                     After the maintenance activities have concluded, the operator is expected to restore the BGP sessions to their original Administrative state.
                 </t>
-                <section title="Maintenance Communication Considerations">
+                <section title="Maintenance Considerations">
                     <t>
-                        Initiators of the Administrative Shutdown are encouraged to use <xref target="I-D.ietf-idr-shutdown">Shutdown Communication</xref> to inform the remote side on the nature and duration of the maintenance activities.
+                        Initiators of the Administrative Shutdown could consider to use <xref target="I.D.ietf-grow-bgp-gshut">Graceful Shutdown</xref> to facilitate smooth drainage of traffic prior to session tear down, and the <xref target="I-D.ietf-idr-shutdown">Shutdown Communication</xref> to inform the remote side on the nature and duration of the maintenance activities.
                     </t>
                 </section>
             </section>
@@ -214,7 +214,7 @@
 
         <section anchor="Acknowledgments" title="Acknowledgments">
             <t>
-                The authors would like to thank the following people for their contributions to this document: Saku Ytti, Greg Hankins, James Bensley, Wolfgang Tremmel and Daniel Rösen.
+                The authors would like to thank the following people for their contributions to this document: Saku Ytti, Greg Hankins, James Bensley, Wolfgang Tremmel, Daniel Rösen, and Bruno Decraene.
             </t>
         </section>
 
@@ -240,6 +240,7 @@
         </references>
 
         <references title="Informative References">
+            <?rfc include="reference.I-D.draft-ietf-grow-bgp-gshut-06"?>
             <?rfc include="reference.I-D.draft-ietf-idr-shutdown-07"?>
             <?rfc include="reference.I-D.draft-ietf-rtgwg-bgp-pic-01"?>
             <?rfc include="reference.RFC.5880.xml"?>
