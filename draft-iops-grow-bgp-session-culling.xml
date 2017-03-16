@@ -127,7 +127,8 @@
                 </t>
                 <section title="Maintenance Considerations">
                     <t>
-                        Initiators of the Administrative Shutdown could consider to use <xref target="I.D.ietf-grow-bgp-gshut">Graceful Shutdown</xref> to facilitate smooth drainage of traffic prior to session tear down, and the <xref target="I-D.ietf-idr-shutdown">Shutdown Communication</xref> to inform the remote side on the nature and duration of the maintenance activities.
+                        <!-- note: gshut can be referenced properly when the draft is revived -->
+                        Initiators of the Administrative Shutdown could consider to use [Graceful Shutdown] to facilitate smooth drainage of traffic prior to session tear down, and the <xref target="I-D.ietf-idr-shutdown">Shutdown Communication</xref> to inform the remote side on the nature and duration of the maintenance activities.
                     </t>
                 </section>
             </section>
@@ -240,7 +241,7 @@
         </references>
 
         <references title="Informative References">
-            <?rfc include="reference.I-D.draft-ietf-grow-bgp-gshut-06"?>
+<!--            <?rfc include="reference.I-D.draft-ietf-grow-bgp-gshut-06"?> -->
             <?rfc include="reference.I-D.draft-ietf-idr-shutdown-07"?>
             <?rfc include="reference.I-D.draft-ietf-rtgwg-bgp-pic-01"?>
             <?rfc include="reference.RFC.5880.xml"?>
@@ -249,6 +250,9 @@
         <section anchor="acl1" title="Example packet filters">
             <t>
                 Example packet filters for "Involuntary BGP Session Teardown" at an IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
+            </t>
+            <t>
+                A repository of configuration examples for a number of assorted platforms can be found at <eref target="https://github.com/bgp/bgp-session-culling-config-examples">github.com/bgp/bgp-session-culling-config-examples</eref>.
             </t>
 <section title="Juniper Junos Layer 2 Firewall Example Configuration">
 <figure>
