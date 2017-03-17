@@ -89,14 +89,18 @@
     <middle>
         <section anchor="Introduction" title="Introduction">
             <t>
-                In network topologies where BGP speaking routers are directly attached to each other, or use fault detection mechanisms such as <xref target="RFC5880">BFD</xref>, detecting and acting upon a link down event (for example when someone yanks the physical connector) in a timely fashion is straightforward.
-            </t>
-            <t>
-                However, in topologies where upper layer fast fault detection mechanisms are unavailable and the lower layer topology is hidden from the BGP speakers, operators rely on BGP Hold Timer Expiration (section 6.5 of <xref target="RFC4271" />) to initiate traffic rerouting.
-                Common BGP Hold Timer values are anywhere between 90 and 180 seconds, which implies a window of 90 to 180 seconds during which traffic blackholing will occur if the lower layer network is not able to forward traffic.
-            </t>
-            <t>
                 BGP Session Culling is the practice of ensuring BGP sessions are forcefully torn down before maintenance activities on a lower layer network commence, which otherwise would affect the flow of data between the BGP speakers.
+            </t>
+            <t>
+                BGP Session Culling ensures that network maintenance activities cause the minimum possible amount of disruption, by giving BGP speakers advance notice of an impending outage, so they may preemptively react to it by gracefully converging onto alternate paths while the forwarding plane remains fully operational.
+            </t>
+            <t>
+                The grace period required for a successful implementation BGP Session Culling is the sum of the time needed to detect the BGP session loss plus the time required for the BGP speaker to converge on alternate paths.
+                The first value is in the worst case governed by the BGP Hold Timer (section 6.5 of <xref target="RFC4271" />), commonly between 90 and 180 seconds,
+                The second value is implementation specific, but could be as much as 15 minutes or more in the case of sessions where a router with a slow control plane is receiving a full set of Internet routes.
+            </t>
+            <t>
+                Operators implementing BGP Session Culling are in any case encouraged to avoid using a fixed grace period, but instead monitor forwarding plane activity while the culling is taking place and consider it complete <xref target="Monitoring_Considerations">once traffic levels have dropped to a minimum</xref>.
             </t>
         </section>
 
@@ -202,7 +206,7 @@
                     </t>
                 </section>
             </section>
-            <section title="Monitoring Considerations">
+            <section anchor="Monitoring_Considerations" title="Monitoring Considerations">
                 <t>
                     The caretaker of the lower layer can monitor data-plane traffic (e.g. interface counters) and carry out the maintenance without impact to traffic once session culling is complete.
                 </t>
@@ -244,7 +248,6 @@
 <!--            <?rfc include="reference.I-D.draft-ietf-grow-bgp-gshut-06"?> -->
             <?rfc include="reference.I-D.draft-ietf-idr-shutdown-07"?>
             <?rfc include="reference.I-D.draft-ietf-rtgwg-bgp-pic-01"?>
-            <?rfc include="reference.RFC.5880.xml"?>
         </references>
 
         <section anchor="acl1" title="Example packet filters">
