@@ -257,61 +257,7 @@
             <t>
                 A repository of configuration examples for a number of assorted platforms can be found at <eref target="https://github.com/bgp/bgp-session-culling-config-examples">github.com/bgp/bgp-session-culling-config-examples</eref>.
             </t>
-<section title="Juniper Junos Layer 2 Firewall Example Configuration">
-<figure>
-<artwork><![CDATA[
-> show configuration firewall family ethernet-switching filter cull
-term cull-v4 {
-    from {
-        ip-version {
-            ipv4 {
-                port bgp;
-                ip-source-address {
-                    192.0.2.0/24;
-                }
-                ip-destination-address {
-                    192.0.2.0/24;
-                }
-                ip-protocol tcp;
-            }
-        }
-    }
-    then discard;
-}
-term cull-v6 {
-    from {
-        ip-version {
-            ipv6 {
-                next-header tcp;
-                port bgp;
-                ip6-source-address {
-                    2001:db8:2::/64;
-                }
-                ip6-destination-address {
-                    2001:db8:2::/64;
-                }
-            }
-        }
-    }
-    then discard;
-}
-term rest {
-    then accept;
-}
-
-> show configuration interfaces xe-0/0/46
-description "IXP Participant Affected by Maintenance"
-unit 0 {
-    family ethernet-switching {
-        filter {
-            input cull;
-        }
-    }
-}
-]]></artwork>
-</figure>
-</section>
-<section title="Cisco IOS XR &amp; Arista EOS Firewall Example Configuration">
+<section title="Cisco IOS, IOS XR &amp; Arista EOS Firewall Example Configuration">
 <figure>
 <artwork><![CDATA[
 ipv6 access-list acl-ipv6-permit-all-except-bgp
