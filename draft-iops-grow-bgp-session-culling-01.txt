@@ -5,12 +5,12 @@
 Global Routing Operations                                    W. Hargrave
 Internet-Draft                                                     LONAP
 Intended status: Best Current Practice                       M. Griswold
-Expires: September 17, 2017                                          20C
+Expires: September 20, 2017                                          20C
                                                              J. Snijders
                                                                      NTT
                                                              N. Hilliard
                                                                     INEX
-                                                          March 16, 2017
+                                                          March 19, 2017
 
 
  Mitigating Negative Impact of Maintenance through BGP Session Culling
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 17, 2017.
+   This Internet-Draft will expire on September 20, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Hargrave, et al.       Expires September 17, 2017               [Page 1]
+Hargrave, et al.       Expires September 20, 2017               [Page 1]
 
 Internet-Draft             BGP Session Culling                March 2017
 
@@ -71,11 +71,11 @@ Table of Contents
    2.  Requirements Language . . . . . . . . . . . . . . . . . . . .   3
    3.  BGP Session Culling . . . . . . . . . . . . . . . . . . . . .   3
      3.1.  Voluntary BGP Session Teardown Recommendations  . . . . .   3
-       3.1.1.  Maintenance Considerations  . . . . . . . . . . . . .   3
+       3.1.1.  Maintenance Considerations  . . . . . . . . . . . . .   4
      3.2.  Involuntary BGP Session Teardown Recommendations  . . . .   4
        3.2.1.  Packet Filter Considerations  . . . . . . . . . . . .   4
        3.2.2.  Hardware Considerations . . . . . . . . . . . . . . .   5
-     3.3.  Monitoring Considerations . . . . . . . . . . . . . . . .   5
+     3.3.  Monitoring Considerations . . . . . . . . . . . . . . . .   6
    4.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .   6
    5.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
@@ -90,34 +90,38 @@ Table of Contents
 
 1.  Introduction
 
-   In network topologies where BGP speaking routers are directly
-   attached to each other, or use fault detection mechanisms such as BFD
-   [RFC5880], detecting and acting upon a link down event (for example
-   when someone yanks the physical connector) in a timely fashion is
-   straightforward.
-
-   However, in topologies where upper layer fast fault detection
-   mechanisms are unavailable and the lower layer topology is hidden
-   from the BGP speakers, operators rely on BGP Hold Timer Expiration
-   (section 6.5 of [RFC4271]) to initiate traffic rerouting.  Common BGP
-   Hold Timer values are anywhere between 90 and 180 seconds, which
-   implies a window of 90 to 180 seconds during which traffic
-   blackholing will occur if the lower layer network is not able to
-   forward traffic.
-
-
-
-
-
-Hargrave, et al.       Expires September 17, 2017               [Page 2]
-
-Internet-Draft             BGP Session Culling                March 2017
-
-
    BGP Session Culling is the practice of ensuring BGP sessions are
    forcefully torn down before maintenance activities on a lower layer
    network commence, which otherwise would affect the flow of data
    between the BGP speakers.
+
+   BGP Session Culling ensures that lower layer network maintenance
+   activities cause the minimum possible amount of disruption, by
+   causing BGP speakers to preemptively gracefully converging onto
+   alternate paths while the lower layer network's forwarding plane
+   remains fully operational.
+
+   The grace period required for a successful application of BGP Session
+   Culling is the sum of the time needed to detect the loss of the BGP
+   session, plus the time required for the BGP speaker to converge onto
+   alternative paths.  The first value is governed by the BGP Hold Timer
+   (section 6.5 of [RFC4271]), commonly between 90 and 180 seconds, The
+
+
+
+Hargrave, et al.       Expires September 20, 2017               [Page 2]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
+   second value is implementation specific, but could be as much as 15
+   minutes when a router with a slow control-plane is receiving a full
+   set of Internet routes.
+
+   Operators implementing BGP Session Culling are encouraged to avoid
+   using a fixed grace period, but instead monitor forwarding plane
+   activity while the culling is taking place and consider it complete
+   once traffic levels have dropped to a minimum (Section 3.3).
 
 2.  Requirements Language
 
@@ -157,19 +161,20 @@ Internet-Draft             BGP Session Culling                March 2017
    expected to restore the BGP sessions to their original Administrative
    state.
 
+
+
+
+
+Hargrave, et al.       Expires September 20, 2017               [Page 3]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
 3.1.1.  Maintenance Considerations
 
    Initiators of the Administrative Shutdown could consider to use
    [Graceful Shutdown] to facilitate smooth drainage of traffic prior to
    session tear down, and the Shutdown Communication
-
-
-
-Hargrave, et al.       Expires September 17, 2017               [Page 3]
-
-Internet-Draft             BGP Session Culling                March 2017
-
-
    [I-D.ietf-idr-shutdown] to inform the remote side on the nature and
    duration of the maintenance activities.
 
@@ -212,19 +217,20 @@ Internet-Draft             BGP Session Culling                March 2017
 
    o  The packet filter MUST only affect BGP, i.e. TCP/179
 
+
+
+
+
+Hargrave, et al.       Expires September 20, 2017               [Page 4]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
    o  The packet filter SHOULD make provision for the bidirectional
       nature of BGP, i.e. that sessions may be established in either
       direction
 
    o  The packet filter MUST affect all relevant AFIs
-
-
-
-
-Hargrave, et al.       Expires September 17, 2017               [Page 4]
-
-Internet-Draft             BGP Session Culling                March 2017
-
 
    Appendix A contains examples of correct packet filters for various
    platforms.
@@ -265,6 +271,17 @@ Internet-Draft             BGP Session Culling                March 2017
    in advance to ensure that problems don't occur during production
    deployments.
 
+
+
+
+
+
+
+Hargrave, et al.       Expires September 20, 2017               [Page 5]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
 3.3.  Monitoring Considerations
 
    The caretaker of the lower layer can monitor data-plane traffic (e.g.
@@ -273,15 +290,6 @@ Internet-Draft             BGP Session Culling                March 2017
 
    It is NOT RECOMMENDED that the packet filters are left in place for
    long periods of time without further maintenance occurring.  This is
-
-
-
-
-Hargrave, et al.       Expires September 17, 2017               [Page 5]
-
-Internet-Draft             BGP Session Culling                March 2017
-
-
    because an operator may begin to carry out troubleshooting, unaware
    that this methodology is being used.
 
@@ -289,7 +297,8 @@ Internet-Draft             BGP Session Culling                March 2017
 
    The authors would like to thank the following people for their
    contributions to this document: Saku Ytti, Greg Hankins, James
-   Bensley, Wolfgang Tremmel, Daniel Roesen, and Bruno Decraene.
+   Bensley, Wolfgang Tremmel, Daniel Roesen, Bruno Decraene, and Tore
+   Anderson.
 
 5.  Security Considerations
 
@@ -320,23 +329,19 @@ Internet-Draft             BGP Session Culling                March 2017
               Administrative Shutdown Communication", draft-ietf-idr-
               shutdown-07 (work in progress), March 2017.
 
+
+
+
+
+Hargrave, et al.       Expires September 20, 2017               [Page 6]
+
+Internet-Draft             BGP Session Culling                March 2017
+
+
    [I-D.ietf-rtgwg-bgp-pic]
               Bashandy, A., Filsfils, C., and P. Mohapatra, "BGP Prefix
               Independent Convergence", draft-ietf-rtgwg-bgp-pic-01
               (work in progress), June 2016.
-
-   [RFC5880]  Katz, D. and D. Ward, "Bidirectional Forwarding Detection
-              (BFD)", RFC 5880, DOI 10.17487/RFC5880, June 2010,
-              <http://www.rfc-editor.org/info/rfc5880>.
-
-
-
-
-
-Hargrave, et al.       Expires September 17, 2017               [Page 6]
-
-Internet-Draft             BGP Session Culling                March 2017
-
 
 7.3.  URIs
 
@@ -384,12 +389,7 @@ A.1.  Juniper Junos Layer 2 Firewall Example Configuration
 
 
 
-
-
-
-
-
-Hargrave, et al.       Expires September 17, 2017               [Page 7]
+Hargrave, et al.       Expires September 20, 2017               [Page 7]
 
 Internet-Draft             BGP Session Culling                March 2017
 
@@ -445,7 +445,7 @@ Internet-Draft             BGP Session Culling                March 2017
 
 
 
-Hargrave, et al.       Expires September 17, 2017               [Page 8]
+Hargrave, et al.       Expires September 20, 2017               [Page 8]
 
 Internet-Draft             BGP Session Culling                March 2017
 
@@ -501,7 +501,7 @@ A.3.  Nokia SR OS Filter Example Configuration
 
 
 
-Hargrave, et al.       Expires September 17, 2017               [Page 9]
+Hargrave, et al.       Expires September 20, 2017               [Page 9]
 
 Internet-Draft             BGP Session Culling                March 2017
 
@@ -557,7 +557,7 @@ Authors' Addresses
 
 
 
-Hargrave, et al.       Expires September 17, 2017              [Page 10]
+Hargrave, et al.       Expires September 20, 2017              [Page 10]
 
 Internet-Draft             BGP Session Culling                March 2017
 
@@ -613,4 +613,4 @@ Internet-Draft             BGP Session Culling                March 2017
 
 
 
-Hargrave, et al.       Expires September 17, 2017              [Page 11]
+Hargrave, et al.       Expires September 20, 2017              [Page 11]
