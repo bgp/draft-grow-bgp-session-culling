@@ -100,7 +100,7 @@
                 The second value is implementation specific, but could be as much as 15 minutes when a router with a slow control-plane is receiving a full set of Internet routes.
             </t>
             <t>
-                Operators implementing BGP Session Culling are encouraged to avoid using a fixed grace period, but instead monitor forwarding plane activity while the culling is taking place and consider it complete <xref target="Monitoring_Considerations">once traffic levels have dropped to a minimum</xref>.
+                Operators implementing BGP Session Culling are encouraged to avoid using a fixed grace period, but instead monitor forwarding plane activity while the culling is taking place and consider it complete <xref target="Procedural_Considerations">once traffic levels have dropped to a minimum</xref>.
             </t>
         </section>
 
@@ -206,12 +206,13 @@
                     </t>
                 </section>
             </section>
-            <section anchor="Monitoring_Considerations" title="Monitoring Considerations">
+            <section anchor="Procedural_Considerations" title="Procedural Considerations">
                 <t>
                     The caretaker of the lower layer can monitor data-plane traffic (e.g. interface counters) and carry out the maintenance without impact to traffic once session culling is complete.
                 </t>
                 <t>
-                    It is NOT RECOMMENDED that the packet filters are left in place for long periods of time without further maintenance occurring. This is because an operator may begin to carry out troubleshooting, unaware that this methodology is being used.
+                    It is recommended that the packet filters are only deployed for the duration of the maintenance and immediately removed after the maintenance.
+                    To prevent unnecessarily troubleshooting, it is RECOMMENDED that caretakers notify the affected operators before the maintenance takes place, and make it explicit that the Involuntary BGP Session Culling methodology will be applied.
                 </t>
             </section>
 

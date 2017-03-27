@@ -5,12 +5,12 @@
 Global Routing Operations                                    W. Hargrave
 Internet-Draft                                                     LONAP
 Intended status: Best Current Practice                       M. Griswold
-Expires: September 20, 2017                                          20C
+Expires: September 28, 2017                                          20C
                                                              J. Snijders
                                                                      NTT
                                                              N. Hilliard
                                                                     INEX
-                                                          March 19, 2017
+                                                          March 27, 2017
 
 
  Mitigating Negative Impact of Maintenance through BGP Session Culling
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 20, 2017.
+   This Internet-Draft will expire on September 28, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Hargrave, et al.       Expires September 20, 2017               [Page 1]
+Hargrave, et al.       Expires September 28, 2017               [Page 1]
 
 Internet-Draft             BGP Session Culling                March 2017
 
@@ -75,7 +75,7 @@ Table of Contents
      3.2.  Involuntary BGP Session Teardown Recommendations  . . . .   4
        3.2.1.  Packet Filter Considerations  . . . . . . . . . . . .   4
        3.2.2.  Hardware Considerations . . . . . . . . . . . . . . .   5
-     3.3.  Monitoring Considerations . . . . . . . . . . . . . . . .   6
+     3.3.  Procedural Considerations . . . . . . . . . . . . . . . .   6
    4.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .   6
    5.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
@@ -83,10 +83,10 @@ Table of Contents
      7.1.  Normative References  . . . . . . . . . . . . . . . . . .   6
      7.2.  Informative References  . . . . . . . . . . . . . . . . .   6
    Appendix A.  Example packet filters . . . . . . . . . . . . . . .   7
-     A.1.  Juniper Junos Layer 2 Firewall Example Configuration  . .   7
-     A.2.  Cisco IOS XR & Arista EOS Firewall Example Configuration    9
-     A.3.  Nokia SR OS Filter Example Configuration  . . . . . . . .   9
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
+     A.1.  Cisco IOS, IOS XR & Arista EOS Firewall Example
+           Configuration . . . . . . . . . . . . . . . . . . . . . .   7
+     A.2.  Nokia SR OS Filter Example Configuration  . . . . . . . .   7
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
 
 1.  Introduction
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Hargrave, et al.       Expires September 20, 2017               [Page 2]
+Hargrave, et al.       Expires September 28, 2017               [Page 2]
 
 Internet-Draft             BGP Session Culling                March 2017
 
@@ -165,7 +165,7 @@ Internet-Draft             BGP Session Culling                March 2017
 
 
 
-Hargrave, et al.       Expires September 20, 2017               [Page 3]
+Hargrave, et al.       Expires September 28, 2017               [Page 3]
 
 Internet-Draft             BGP Session Culling                March 2017
 
@@ -221,7 +221,7 @@ Internet-Draft             BGP Session Culling                March 2017
 
 
 
-Hargrave, et al.       Expires September 20, 2017               [Page 4]
+Hargrave, et al.       Expires September 28, 2017               [Page 4]
 
 Internet-Draft             BGP Session Culling                March 2017
 
@@ -277,21 +277,23 @@ Internet-Draft             BGP Session Culling                March 2017
 
 
 
-Hargrave, et al.       Expires September 20, 2017               [Page 5]
+Hargrave, et al.       Expires September 28, 2017               [Page 5]
 
 Internet-Draft             BGP Session Culling                March 2017
 
 
-3.3.  Monitoring Considerations
+3.3.  Procedural Considerations
 
    The caretaker of the lower layer can monitor data-plane traffic (e.g.
    interface counters) and carry out the maintenance without impact to
    traffic once session culling is complete.
 
-   It is NOT RECOMMENDED that the packet filters are left in place for
-   long periods of time without further maintenance occurring.  This is
-   because an operator may begin to carry out troubleshooting, unaware
-   that this methodology is being used.
+   It is recommended that the packet filters are only deployed for the
+   duration of the maintenance and immediately removed after the
+   maintenance.  To prevent unnecessarily troubleshooting, it is
+   RECOMMENDED that caretakers notify the affected operators before the
+   maintenance takes place, and make it explicit that the Involuntary
+   BGP Session Culling methodology will be applied.
 
 4.  Acknowledgments
 
@@ -331,9 +333,7 @@ Internet-Draft             BGP Session Culling                March 2017
 
 
 
-
-
-Hargrave, et al.       Expires September 20, 2017               [Page 6]
+Hargrave, et al.       Expires September 28, 2017               [Page 6]
 
 Internet-Draft             BGP Session Culling                March 2017
 
@@ -356,101 +356,7 @@ Appendix A.  Example packet filters
    platforms can be found at github.com/bgp/bgp-session-culling-config-
    examples [1].
 
-A.1.  Juniper Junos Layer 2 Firewall Example Configuration
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Hargrave, et al.       Expires September 20, 2017               [Page 7]
-
-Internet-Draft             BGP Session Culling                March 2017
-
-
-   > show configuration firewall family ethernet-switching filter cull
-   term cull-v4 {
-       from {
-           ip-version {
-               ipv4 {
-                   port bgp;
-                   ip-source-address {
-                       192.0.2.0/24;
-                   }
-                   ip-destination-address {
-                       192.0.2.0/24;
-                   }
-                   ip-protocol tcp;
-               }
-           }
-       }
-       then discard;
-   }
-   term cull-v6 {
-       from {
-           ip-version {
-               ipv6 {
-                   next-header tcp;
-                   port bgp;
-                   ip6-source-address {
-                       2001:db8:2::/64;
-                   }
-                   ip6-destination-address {
-                       2001:db8:2::/64;
-                   }
-               }
-           }
-       }
-       then discard;
-   }
-   term rest {
-       then accept;
-   }
-
-   > show configuration interfaces xe-0/0/46
-   description "IXP Participant Affected by Maintenance"
-   unit 0 {
-       family ethernet-switching {
-           filter {
-               input cull;
-           }
-       }
-   }
-
-
-
-Hargrave, et al.       Expires September 20, 2017               [Page 8]
-
-Internet-Draft             BGP Session Culling                March 2017
-
-
-A.2.  Cisco IOS XR & Arista EOS Firewall Example Configuration
+A.1.  Cisco IOS, IOS XR & Arista EOS Firewall Example Configuration
 
    ipv6 access-list acl-ipv6-permit-all-except-bgp
       10 deny tcp 2001:db8:2::/64 eq bgp 2001:db8:2::/64
@@ -468,7 +374,7 @@ A.2.  Cisco IOS XR & Arista EOS Firewall Example Configuration
       ipv6 access-group acl-ipv6-permit-all-except-bgp in
    !
 
-A.3.  Nokia SR OS Filter Example Configuration
+A.2.  Nokia SR OS Filter Example Configuration
 
 
 
@@ -483,25 +389,7 @@ A.3.  Nokia SR OS Filter Example Configuration
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Hargrave, et al.       Expires September 20, 2017               [Page 9]
+Hargrave, et al.       Expires September 28, 2017               [Page 7]
 
 Internet-Draft             BGP Session Culling                March 2017
 
@@ -557,7 +445,7 @@ Authors' Addresses
 
 
 
-Hargrave, et al.       Expires September 20, 2017              [Page 10]
+Hargrave, et al.       Expires September 28, 2017               [Page 8]
 
 Internet-Draft             BGP Session Culling                March 2017
 
@@ -613,4 +501,4 @@ Internet-Draft             BGP Session Culling                March 2017
 
 
 
-Hargrave, et al.       Expires September 20, 2017              [Page 11]
+Hargrave, et al.       Expires September 28, 2017               [Page 9]
