@@ -100,7 +100,8 @@
                 The second value is implementation specific, but could be as much as 15 minutes when a router with a slow control-plane is receiving a full set of Internet routes.
             </t>
             <t>
-                Operators implementing BGP Session Culling are encouraged to avoid using a fixed grace period, but instead monitor forwarding plane activity while the culling is taking place and consider it complete <xref target="Procedural_Considerations">once traffic levels have dropped to a minimum</xref>.
+                Throughout this document the "Caretaker" is defined to be the operator of the lower layer network, while "Operators" directly administrate the BGP speakers.
+                Operators and Caretakers implementing BGP Session Culling are encouraged to avoid using a fixed grace period, but instead monitor forwarding plane activity while the culling is taking place and consider it complete <xref target="Procedural_Considerations">once traffic levels have dropped to a minimum</xref>.
             </t>
         </section>
 
