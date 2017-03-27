@@ -118,10 +118,13 @@ Internet-Draft             BGP Session Culling                March 2017
    minutes when a router with a slow control-plane is receiving a full
    set of Internet routes.
 
-   Operators implementing BGP Session Culling are encouraged to avoid
-   using a fixed grace period, but instead monitor forwarding plane
-   activity while the culling is taking place and consider it complete
-   once traffic levels have dropped to a minimum (Section 3.3).
+   Throughout this document the "Caretaker" is defined to be the
+   operator of the lower layer network, while "Operators" directly
+   administrate the BGP speakers.  Operators and Caretakers implementing
+   BGP Session Culling are encouraged to avoid using a fixed grace
+   period, but instead monitor forwarding plane activity while the
+   culling is taking place and consider it complete once traffic levels
+   have dropped to a minimum (Section 3.3).
 
 2.  Requirements Language
 
@@ -157,9 +160,6 @@ Internet-Draft             BGP Session Culling                March 2017
    between the Administrative Shutdown and the impacting maintenance
    activities is warranted.
 
-   After the maintenance activities have concluded, the operator is
-   expected to restore the BGP sessions to their original Administrative
-   state.
 
 
 
@@ -169,6 +169,10 @@ Hargrave, et al.       Expires September 28, 2017               [Page 3]
 
 Internet-Draft             BGP Session Culling                March 2017
 
+
+   After the maintenance activities have concluded, the operator is
+   expected to restore the BGP sessions to their original Administrative
+   state.
 
 3.1.1.  Maintenance Considerations
 
@@ -215,16 +219,14 @@ Internet-Draft             BGP Session Culling                March 2017
       system described, rather than multihop BGP traffic which merely
       transits
 
-   o  The packet filter MUST only affect BGP, i.e. TCP/179
-
-
-
 
 
 Hargrave, et al.       Expires September 28, 2017               [Page 4]
 
 Internet-Draft             BGP Session Culling                March 2017
 
+
+   o  The packet filter MUST only affect BGP, i.e. TCP/179
 
    o  The packet filter SHOULD make provision for the bidirectional
       nature of BGP, i.e. that sessions may be established in either
@@ -270,8 +272,6 @@ Internet-Draft             BGP Session Culling                March 2017
    their hardware, and to thoroughly test all complicated configurations
    in advance to ensure that problems don't occur during production
    deployments.
-
-
 
 
 
