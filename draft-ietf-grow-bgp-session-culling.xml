@@ -132,7 +132,6 @@
                 </t>
                 <section title="Maintenance Considerations">
                     <t>
-                        <!-- note: gshut can be referenced properly when the draft is revived -->
                         Initiators of the Administrative Shutdown could consider to use [Graceful Shutdown] to facilitate smooth drainage of traffic prior to session tear down, and the <xref target="I-D.ietf-idr-shutdown">Shutdown Communication</xref> to inform the remote side on the nature and duration of the maintenance activities.
                     </t>
                 </section>
@@ -247,7 +246,7 @@
         </references>
 
         <references title="Informative References">
-<!--            <?rfc include="reference.I-D.draft-ietf-grow-bgp-gshut-06"?> -->
+            <?rfc include="reference.I-D.draft-ietf-grow-bgp-gshut-07"?>
             <?rfc include="reference.I-D.draft-ietf-idr-shutdown-07"?>
             <?rfc include="reference.I-D.draft-ietf-rtgwg-bgp-pic-01"?>
         </references>
