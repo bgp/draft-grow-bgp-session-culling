@@ -5,12 +5,12 @@
 Global Routing Operations                                    W. Hargrave
 Internet-Draft                                                     LONAP
 Intended status: Best Current Practice                       M. Griswold
-Expires: December 24, 2017                                           20C
+Expires: January 4, 2018                                             20C
                                                              J. Snijders
                                                                      NTT
                                                              N. Hilliard
                                                                     INEX
-                                                           June 22, 2017
+                                                            July 3, 2017
 
 
  Mitigating Negative Impact of Maintenance through BGP Session Culling
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 24, 2017.
+   This Internet-Draft will expire on January 4, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Hargrave, et al.        Expires December 24, 2017               [Page 1]
+Hargrave, et al.         Expires January 4, 2018                [Page 1]
 
-Internet-Draft             BGP Session Culling                 June 2017
+Internet-Draft             BGP Session Culling                 July 2017
 
 
    publication of this document.  Please review these documents
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Hargrave, et al.        Expires December 24, 2017               [Page 2]
+Hargrave, et al.         Expires January 4, 2018                [Page 2]
 
-Internet-Draft             BGP Session Culling                 June 2017
+Internet-Draft             BGP Session Culling                 July 2017
 
 
    second value is implementation specific, but could be as much as 15
@@ -165,9 +165,9 @@ Internet-Draft             BGP Session Culling                 June 2017
 
 
 
-Hargrave, et al.        Expires December 24, 2017               [Page 3]
+Hargrave, et al.         Expires January 4, 2018                [Page 3]
 
-Internet-Draft             BGP Session Culling                 June 2017
+Internet-Draft             BGP Session Culling                 July 2017
 
 
    After the maintenance activities have concluded, the operator is
@@ -221,9 +221,9 @@ Internet-Draft             BGP Session Culling                 June 2017
 
 
 
-Hargrave, et al.        Expires December 24, 2017               [Page 4]
+Hargrave, et al.         Expires January 4, 2018                [Page 4]
 
-Internet-Draft             BGP Session Culling                 June 2017
+Internet-Draft             BGP Session Culling                 July 2017
 
 
    o  The packet filter MUST only affect BGP, i.e. TCP/179
@@ -277,9 +277,9 @@ Internet-Draft             BGP Session Culling                 June 2017
 
 
 
-Hargrave, et al.        Expires December 24, 2017               [Page 5]
+Hargrave, et al.         Expires January 4, 2018                [Page 5]
 
-Internet-Draft             BGP Session Culling                 June 2017
+Internet-Draft             BGP Session Culling                 July 2017
 
 
 3.3.  Procedural Considerations
@@ -329,24 +329,24 @@ Internet-Draft             BGP Session Culling                 June 2017
    [I-D.ietf-grow-bgp-gshut]
               Francois, P., Decraene, B., Pelsser, C., Patel, K., and C.
               Filsfils, "Graceful BGP session shutdown", draft-ietf-
-              grow-bgp-gshut-07 (work in progress), June 2017.
+              grow-bgp-gshut-09 (work in progress), June 2017.
 
 
 
-Hargrave, et al.        Expires December 24, 2017               [Page 6]
+Hargrave, et al.         Expires January 4, 2018                [Page 6]
 
-Internet-Draft             BGP Session Culling                 June 2017
+Internet-Draft             BGP Session Culling                 July 2017
 
 
    [I-D.ietf-idr-shutdown]
               Snijders, J., Heitz, J., and J. Scudder, "BGP
               Administrative Shutdown Communication", draft-ietf-idr-
-              shutdown-07 (work in progress), March 2017.
+              shutdown-10 (work in progress), June 2017.
 
    [I-D.ietf-rtgwg-bgp-pic]
               Bashandy, A., Filsfils, C., and P. Mohapatra, "BGP Prefix
-              Independent Convergence", draft-ietf-rtgwg-bgp-pic-01
-              (work in progress), June 2016.
+              Independent Convergence", draft-ietf-rtgwg-bgp-pic-05
+              (work in progress), May 2017.
 
 7.3.  URIs
 
@@ -389,9 +389,9 @@ A.2.  Nokia SR OS Filter Example Configuration
 
 
 
-Hargrave, et al.        Expires December 24, 2017               [Page 7]
+Hargrave, et al.         Expires January 4, 2018                [Page 7]
 
-Internet-Draft             BGP Session Culling                 June 2017
+Internet-Draft             BGP Session Culling                 July 2017
 
 
    ip-filter 10 create
@@ -445,9 +445,9 @@ Authors' Addresses
 
 
 
-Hargrave, et al.        Expires December 24, 2017               [Page 8]
+Hargrave, et al.         Expires January 4, 2018                [Page 8]
 
-Internet-Draft             BGP Session Culling                 June 2017
+Internet-Draft             BGP Session Culling                 July 2017
 
 
    Matt Griswold
@@ -501,4 +501,4 @@ Internet-Draft             BGP Session Culling                 June 2017
 
 
 
-Hargrave, et al.        Expires December 24, 2017               [Page 9]
+Hargrave, et al.         Expires January 4, 2018                [Page 9]
