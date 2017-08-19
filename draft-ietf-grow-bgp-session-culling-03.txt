@@ -5,12 +5,12 @@
 Global Routing Operations                                    W. Hargrave
 Internet-Draft                                                     LONAP
 Intended status: Best Current Practice                       M. Griswold
-Expires: February 12, 2018                                           20C
+Expires: February 20, 2018                                           20C
                                                              J. Snijders
                                                                      NTT
                                                              N. Hilliard
                                                                     INEX
-                                                         August 11, 2017
+                                                         August 19, 2017
 
 
  Mitigating Negative Impact of Maintenance through BGP Session Culling
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on February 12, 2018.
+   This Internet-Draft will expire on February 20, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Hargrave, et al.        Expires February 12, 2018               [Page 1]
+Hargrave, et al.        Expires February 20, 2018               [Page 1]
 
 Internet-Draft             BGP Session Culling               August 2017
 
@@ -91,14 +91,14 @@ Table of Contents
 1.  Introduction
 
    BGP Session Culling is the practice of ensuring BGP sessions are
-   forcefully torn down before maintenance activities on a Layer 2
+   forcefully torn down before maintenance activities on a lower layer
    network commence, which otherwise would affect the flow of data
    between the BGP speakers.
 
-   BGP Session Culling ensures that Layer 2 network maintenance
+   BGP Session Culling ensures that lower layer network maintenance
    activities cause the minimum possible amount of disruption, by
    causing BGP speakers to preemptively converge onto alternative paths
-   while the Layer 2 network's forwarding plane remains fully
+   while the lower layer network's forwarding plane remains fully
    operational.
 
    The grace period required for a successful application of BGP Session
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Hargrave, et al.        Expires February 12, 2018               [Page 2]
+Hargrave, et al.        Expires February 20, 2018               [Page 2]
 
 Internet-Draft             BGP Session Culling               August 2017
 
@@ -119,7 +119,7 @@ Internet-Draft             BGP Session Culling               August 2017
    receiving a full set of Internet routes.
 
    Throughout this document the "Caretaker" is defined to be the
-   operator of the Layer 2 network, while "Operators" directly
+   operator of the lower layer network, while "Operators" directly
    administrate the BGP speakers.  Operators and Caretakers implementing
    BGP Session Culling are encouraged to avoid using a fixed grace
    period, but instead monitor forwarding plane activity while the
@@ -141,7 +141,7 @@ Internet-Draft             BGP Session Culling               August 2017
       of the potentially affected BGP session by issuing an
       Administrative Shutdown.
 
-   Involuntary BGP Session Teardown:  The Caretaker of the Layer 2
+   Involuntary BGP Session Teardown:  The Caretaker of the lower layer
       network disrupts BGP control-plane traffic in the upper layer,
       causing the BGP Hold Timers of the affected BGP session to expire,
       subsequently triggering rerouting of end user traffic.
@@ -149,10 +149,10 @@ Internet-Draft             BGP Session Culling               August 2017
 3.1.  Voluntary BGP Session Teardown Recommendations
 
    Before an Operator commences activities which can cause disruption to
-   the flow of data through the Layer 2 network, an operator can reduce
-   loss of traffic by issuing an administrative shutdown to all BGP
-   sessions running across the Layer 2 network and wait a few minutes
-   for data-plane traffic to subside.
+   the flow of data through the lower layer network, an operator can
+   reduce loss of traffic by issuing an administrative shutdown to all
+   BGP sessions running across the lower layer network and wait a few
+   minutes for data-plane traffic to subside.
 
    While architectures exist to facilitate quick network reconvergence
    (such as BGP PIC [I-D.ietf-rtgwg-bgp-pic]), an operator cannot assume
@@ -165,7 +165,7 @@ Internet-Draft             BGP Session Culling               August 2017
 
 
 
-Hargrave, et al.        Expires February 12, 2018               [Page 3]
+Hargrave, et al.        Expires February 20, 2018               [Page 3]
 
 Internet-Draft             BGP Session Culling               August 2017
 
@@ -195,10 +195,10 @@ Internet-Draft             BGP Session Culling               August 2017
    configuration changes required.  This has an adverse affect on
    Internet performance.
 
-   In the absence of Layer 2 notifications (e.g. ethernet link down)
-   consistent with the planned maintenance activities in a switched
-   layer-2 fabric, the Caretaker of the fabric could choose to cull BGP
-   sessions on behalf of the Operators connected to the fabric.
+   In the absence notifications from the lower layer (e.g. ethernet link
+   down) consistent with the planned maintenance activities in a
+   switched layer-2 fabric, the Caretaker of the fabric could choose to
+   cull BGP sessions on behalf of the Operators connected to the fabric.
 
    Such culling of control-plane traffic will pre-empt the loss of end-
    user traffic, by causing the expiration of BGP Hold Timers ahead of
@@ -221,7 +221,7 @@ Internet-Draft             BGP Session Culling               August 2017
 
 
 
-Hargrave, et al.        Expires February 12, 2018               [Page 4]
+Hargrave, et al.        Expires February 20, 2018               [Page 4]
 
 Internet-Draft             BGP Session Culling               August 2017
 
@@ -277,16 +277,16 @@ Internet-Draft             BGP Session Culling               August 2017
 
 
 
-Hargrave, et al.        Expires February 12, 2018               [Page 5]
+Hargrave, et al.        Expires February 20, 2018               [Page 5]
 
 Internet-Draft             BGP Session Culling               August 2017
 
 
 3.3.  Procedural Considerations
 
-   The Caretaker of the Layer 2 network can monitor data-plane traffic
-   (e.g. interface counters) and carry out the maintenance without
-   impact to traffic once session culling is complete.
+   The Caretaker of the lower layer network can monitor data-plane
+   traffic (e.g. interface counters) and carry out the maintenance
+   without impact to traffic once session culling is complete.
 
    It is recommended that the packet filters are only deployed for the
    duration of the maintenance and immediately removed after the
@@ -333,7 +333,7 @@ Internet-Draft             BGP Session Culling               August 2017
 
 
 
-Hargrave, et al.        Expires February 12, 2018               [Page 6]
+Hargrave, et al.        Expires February 20, 2018               [Page 6]
 
 Internet-Draft             BGP Session Culling               August 2017
 
@@ -389,7 +389,7 @@ A.2.  Nokia SR OS Filter Example Configuration
 
 
 
-Hargrave, et al.        Expires February 12, 2018               [Page 7]
+Hargrave, et al.        Expires February 20, 2018               [Page 7]
 
 Internet-Draft             BGP Session Culling               August 2017
 
@@ -445,7 +445,7 @@ Authors' Addresses
 
 
 
-Hargrave, et al.        Expires February 12, 2018               [Page 8]
+Hargrave, et al.        Expires February 20, 2018               [Page 8]
 
 Internet-Draft             BGP Session Culling               August 2017
 
@@ -501,4 +501,4 @@ Internet-Draft             BGP Session Culling               August 2017
 
 
 
-Hargrave, et al.        Expires February 12, 2018               [Page 9]
+Hargrave, et al.        Expires February 20, 2018               [Page 9]

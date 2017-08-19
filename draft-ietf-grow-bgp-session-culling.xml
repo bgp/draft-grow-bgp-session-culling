@@ -89,10 +89,10 @@
     <middle>
         <section anchor="Introduction" title="Introduction">
             <t>
-                BGP Session Culling is the practice of ensuring BGP sessions are forcefully torn down before maintenance activities on a Layer 2 network commence, which otherwise would affect the flow of data between the BGP speakers.
+                BGP Session Culling is the practice of ensuring BGP sessions are forcefully torn down before maintenance activities on a lower layer network commence, which otherwise would affect the flow of data between the BGP speakers.
             </t>
             <t>
-                BGP Session Culling ensures that Layer 2 network maintenance activities cause the minimum possible amount of disruption, by causing BGP speakers to preemptively converge onto alternative paths while the Layer 2 network's forwarding plane remains fully operational.
+                BGP Session Culling ensures that lower layer network maintenance activities cause the minimum possible amount of disruption, by causing BGP speakers to preemptively converge onto alternative paths while the lower layer network's forwarding plane remains fully operational.
             </t>
             <t>
                 The grace period required for a successful application of BGP Session Culling is the sum of the time needed to detect the loss of the BGP session, plus the time required for the BGP speaker to converge onto alternative paths.
@@ -100,7 +100,7 @@
                 The second value is implementation specific, but could be as much as 15 minutes when a router with a slow control-plane is receiving a full set of Internet routes.
             </t>
             <t>
-                Throughout this document the "Caretaker" is defined to be the operator of the Layer 2 network, while "Operators" directly administrate the BGP speakers.
+                Throughout this document the "Caretaker" is defined to be the operator of the lower layer network, while "Operators" directly administrate the BGP speakers.
                 Operators and Caretakers implementing BGP Session Culling are encouraged to avoid using a fixed grace period, but instead monitor forwarding plane activity while the culling is taking place and consider it complete <xref target="Procedural_Considerations">once traffic levels have dropped to a minimum</xref>.
             </t>
         </section>
@@ -116,12 +116,12 @@
                 From the viewpoint of the IP network operator, there are two types of BGP Session Culling:
                 <list style="hanging">
                     <t hangText="Voluntary BGP Session Teardown:">The Operator initiates the tear down of the potentially affected BGP session by issuing an Administrative Shutdown.</t>
-                    <t hangText="Involuntary BGP Session Teardown:">The Caretaker of the Layer 2 network disrupts BGP control-plane traffic in the upper layer, causing the BGP Hold Timers of the affected BGP session to expire, subsequently triggering rerouting of end user traffic.</t>
+                    <t hangText="Involuntary BGP Session Teardown:">The Caretaker of the lower layer network disrupts BGP control-plane traffic in the upper layer, causing the BGP Hold Timers of the affected BGP session to expire, subsequently triggering rerouting of end user traffic.</t>
                 </list>
             </t>
             <section title="Voluntary BGP Session Teardown Recommendations">
                 <t>
-                    Before an Operator commences activities which can cause disruption to the flow of data through the Layer 2 network, an operator can reduce loss of traffic by issuing an administrative shutdown to all BGP sessions running across the Layer 2 network and wait a few minutes for data-plane traffic to subside.
+                    Before an Operator commences activities which can cause disruption to the flow of data through the lower layer network, an operator can reduce loss of traffic by issuing an administrative shutdown to all BGP sessions running across the lower layer network and wait a few minutes for data-plane traffic to subside.
                 </t>
                 <t>
                     While architectures exist to facilitate quick network reconvergence (such as <xref target="I-D.ietf-rtgwg-bgp-pic">BGP PIC</xref>), an operator cannot assume the remote side has such capabilities.
@@ -144,7 +144,7 @@
                     Operational experience shows many network operators are unable to carry out the Voluntary BGP Session Teardown recommendations, because of the operational cost and risk of co-ordinating the two configuration changes required. This has an adverse affect on Internet performance.
                  </t>
                 <t>
-                    In the absence of Layer 2 notifications (e.g. ethernet link down) consistent with the planned maintenance activities in a switched layer-2 fabric, the Caretaker of the fabric could choose to cull BGP sessions on behalf of the Operators connected to the fabric.
+                    In the absence notifications from the lower layer (e.g. ethernet link down) consistent with the planned maintenance activities in a switched layer-2 fabric, the Caretaker of the fabric could choose to cull BGP sessions on behalf of the Operators connected to the fabric.
                 </t>
                 <t>
                     Such culling of control-plane traffic will pre-empt the loss of end-user traffic, by causing the expiration of BGP Hold Timers ahead of the moment where the expiration would occur without intervention from the fabric's Caretaker.
@@ -208,7 +208,7 @@
             </section>
             <section anchor="Procedural_Considerations" title="Procedural Considerations">
                 <t>
-                    The Caretaker of the Layer 2 network can monitor data-plane traffic (e.g. interface counters) and carry out the maintenance without impact to traffic once session culling is complete.
+                    The Caretaker of the lower layer network can monitor data-plane traffic (e.g. interface counters) and carry out the maintenance without impact to traffic once session culling is complete.
                 </t>
                 <t>
                     It is recommended that the packet filters are only deployed for the duration of the maintenance and immediately removed after the maintenance.
