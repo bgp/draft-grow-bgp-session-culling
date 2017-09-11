@@ -116,7 +116,7 @@
                 From the viewpoint of the IP network operator, there are two types of BGP Session Culling:
                 <list style="hanging">
                     <t hangText="Voluntary BGP Session Teardown:">The Operator initiates the tear down of the potentially affected BGP session by issuing an Administrative Shutdown.</t>
-                    <t hangText="Involuntary BGP Session Teardown:">The Caretaker of the lower layer network disrupts BGP control-plane traffic in the upper layer, causing the BGP Hold Timers of the affected BGP session to expire, subsequently triggering rerouting of end user traffic.</t>
+                    <t hangText="Involuntary BGP Session Teardown:">The Caretaker of the lower layer network disrupts (higher layer) BGP control-plane traffic, causing the BGP Hold Timers of the affected BGP session to expire, subsequently triggering rerouting of end user traffic.</t>
                 </list>
             </t>
             <section title="Voluntary BGP Session Teardown Recommendations">
@@ -147,7 +147,7 @@
                     In the absence notifications from the lower layer (e.g. ethernet link down) consistent with the planned maintenance activities in a switched layer-2 fabric, the Caretaker of the fabric could choose to cull BGP sessions on behalf of the Operators connected to the fabric.
                 </t>
                 <t>
-                    Such culling of control-plane traffic will pre-empt the loss of end-user traffic, by causing the expiration of BGP Hold Timers ahead of the moment where the expiration would occur without intervention from the fabric's Caretaker.
+                    Such culling of control-plane traffic will preempt the loss of end-user traffic, by causing the expiration of BGP Hold Timers ahead of the moment where the expiration would occur without intervention from the fabric's Caretaker.
                 </t>
                 <t>
                     In this scenario, BGP Session Culling is accomplished through the application of a combined layer-3 and layer-4 packet filter deployed in the switched fabric itself.
@@ -220,7 +220,7 @@
 
         <section anchor="Acknowledgments" title="Acknowledgments">
             <t>
-                The authors would like to thank the following people for their contributions to this document: Saku Ytti, Greg Hankins, James Bensley, Wolfgang Tremmel, Daniel Rösen, Bruno Decraene, Tore Anderson and John Heasley.
+                The authors would like to thank the following people for their contributions to this document: Saku Ytti, Greg Hankins, James Bensley, Wolfgang Tremmel, Daniel Rösen, Bruno Decraene, Tore Anderson, John Heasley and Warren Kumari.
             </t>
         </section>
 
