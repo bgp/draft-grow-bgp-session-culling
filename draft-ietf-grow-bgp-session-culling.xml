@@ -100,7 +100,7 @@
                 The second value is implementation specific, but could be as much as 15 minutes when a router with a slow control-plane is receiving a full set of Internet routes.
             </t>
             <t>
-                Throughout this document the "Caretaker" is defined to be the operator of the lower layer network, while "Operators" directly administrate the BGP speakers.
+                Throughout this document the "Caretaker" is defined to be in control of the lower layer network, while "Operators" directly administrate the BGP speakers.
                 Operators and Caretakers implementing BGP Session Culling are encouraged to avoid using a fixed grace period, but instead monitor forwarding plane activity while the culling is taking place and consider it complete <xref target="Procedural_Considerations">once traffic levels have dropped to a minimum</xref>.
             </t>
         </section>
@@ -113,7 +113,7 @@
 
         <section title="BGP Session Culling">
             <t>
-                From the viewpoint of the IP network operator, there are two types of BGP Session Culling:
+                From the viewpoint of the Operator, there are two types of BGP Session Culling:
                 <list style="hanging">
                     <t hangText="Voluntary BGP Session Teardown:">The Operator initiates the tear down of the potentially affected BGP session by issuing an Administrative Shutdown.</t>
                     <t hangText="Involuntary BGP Session Teardown:">The Caretaker of the lower layer network disrupts (higher layer) BGP control-plane traffic, causing the BGP Hold Timers of the affected BGP session to expire, subsequently triggering rerouting of end user traffic.</t>
@@ -121,14 +121,14 @@
             </t>
             <section title="Voluntary BGP Session Teardown Recommendations">
                 <t>
-                    Before an Operator commences activities which can cause disruption to the flow of data through the lower layer network, an operator can reduce loss of traffic by issuing an administrative shutdown to all BGP sessions running across the lower layer network and wait a few minutes for data-plane traffic to subside.
+                    Before an Operator commences activities which can cause disruption to the flow of data through the lower layer network, an Operator can reduce loss of traffic by issuing an administrative shutdown to all BGP sessions running across the lower layer network and wait a few minutes for data-plane traffic to subside.
                 </t>
                 <t>
-                    While architectures exist to facilitate quick network reconvergence (such as <xref target="I-D.ietf-rtgwg-bgp-pic">BGP PIC</xref>), an operator cannot assume the remote side has such capabilities.
+                    While architectures exist to facilitate quick network reconvergence (such as <xref target="I-D.ietf-rtgwg-bgp-pic">BGP PIC</xref>), an Operator cannot assume the remote side has such capabilities.
                     As such, a grace period between the Administrative Shutdown and the impacting maintenance activities is warranted.
                 </t>
                 <t>
-                    After the maintenance activities have concluded, the operator is expected to restore the BGP sessions to their original Administrative state.
+                    After the maintenance activities have concluded, the Operator is expected to restore the BGP sessions to their original Administrative state.
                 </t>
                 <section title="Maintenance Considerations">
                     <t>
@@ -141,7 +141,7 @@
                     In the case where multilateral interconnection between BGP speakers is facilitated through a switched layer-2 fabric, such as commonly seen at Internet Exchange Points (IXPs), different operational considerations can apply.
                 </t>
                 <t>
-                    Operational experience shows many network operators are unable to carry out the Voluntary BGP Session Teardown recommendations, because of the operational cost and risk of co-ordinating the two configuration changes required. This has an adverse affect on Internet performance.
+                    Operational experience shows many Operators are unable to carry out the Voluntary BGP Session Teardown recommendations, because of the operational cost and risk of co-ordinating the two configuration changes required. This has an adverse affect on Internet performance.
                  </t>
                 <t>
                     In the absence notifications from the lower layer (e.g. ethernet link down) consistent with the planned maintenance activities in a switched layer-2 fabric, the Caretaker of the fabric could choose to cull BGP sessions on behalf of the Operators connected to the fabric.
@@ -150,7 +150,7 @@
                     Such culling of control-plane traffic will preempt the loss of end-user traffic, by causing the expiration of BGP Hold Timers ahead of the moment where the expiration would occur without intervention from the fabric's Caretaker.
                 </t>
                 <t>
-                    In this scenario, BGP Session Culling is accomplished as described in the next sub-section, through the application of a combined layer-3 and layer-4 packet filter deployed in the switched fabric itself.
+                    In this scenario, BGP Session Culling is accomplished as described in the next sub-section, through the application of a combined layer-3 and layer-4 packet filter deployed in the Caretaker's lower layer network.
                 </t>
                 <section title="Packet Filter Considerations">
                     <t>
@@ -187,7 +187,7 @@
                                 Layer 3/4 filters supported on physical ports, but not on 802.3ad Link Aggregate ports.
                             </t>
                             <t>
-                                Failure of the operator to apply filters to all 802.3ad Link Aggregate ports.
+                                Failure of the Caretaker to apply filters to all 802.3ad Link Aggregate ports.
                             </t>
                             <t>
                                 Limitations in ACL hardware mechanisms causing filters not to be applied.
@@ -202,7 +202,7 @@
                                 Reduction in hardware ACL capacity if the platform enables lossless ACL application.
                             </t>
                         </list>
-                        It is advisable for the operator to be aware of the limitations of their hardware, and to thoroughly test all complicated configurations in advance to ensure that problems don't occur during production deployments.
+                        It is advisable for the Caretaker to be aware of the limitations of their hardware, and to thoroughly test all complicated configurations in advance to ensure that problems don't occur during production deployments.
                     </t>
                 </section>
             </section>
@@ -212,7 +212,7 @@
                 </t>
                 <t>
                     It is recommended that the packet filters are only deployed for the duration of the maintenance and immediately removed after the maintenance.
-                    To prevent unnecessarily troubleshooting, it is RECOMMENDED that Caretakers notify the affected operators before the maintenance takes place, and make it explicit that the Involuntary BGP Session Culling methodology will be applied.
+                    To prevent unnecessarily troubleshooting, it is RECOMMENDED that Caretakers notify the affected Operators before the maintenance takes place, and make it explicit that the Involuntary BGP Session Culling methodology will be applied.
                 </t>
             </section>
 
