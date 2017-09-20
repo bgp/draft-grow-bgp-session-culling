@@ -256,7 +256,7 @@
                 Example packet filters for "Involuntary BGP Session Teardown" at an IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
             </t>
             <t>
-                A repository of configuration examples for a number of assorted platforms can be found at <eref target="https://github.com/bgp/bgp-session-culling-config-examples">github.com/bgp/bgp-session-culling-config-examples</eref>.
+                A repository of configuration examples for a number of assorted platforms can be found at <eref target="https://github.com/bgp/bgp-session-culling-config-examples">https://github.com/bgp/bgp-session-culling-config-examples</eref>.
             </t>
 <section title="Cisco IOS, IOS XR &amp; Arista EOS Firewall Example Configuration">
 <figure>
