@@ -246,8 +246,8 @@
         </references>
 
         <references title="Informative References">
-            <?rfc include="reference.I-D.draft-ietf-grow-bgp-gshut-09"?>
-            <?rfc include="reference.I-D.draft-ietf-idr-shutdown-10"?>
+            <?rfc include="reference.I-D.draft-ietf-grow-bgp-gshut-11"?>
+            <?rfc include="referece.RFC.8203.xml"?>
             <?rfc include="reference.I-D.draft-ietf-rtgwg-bgp-pic-05"?>
         </references>
 
