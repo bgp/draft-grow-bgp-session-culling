@@ -132,7 +132,7 @@
                 </t>
                 <section title="Maintenance Considerations">
                     <t>
-                        Initiators of the administrative shutdown could consider using <xref target="I-D.ietf-grow-bgp-gshut">Graceful Shutdown</xref> to facilitate smooth drainage of traffic prior to session tear down, and the <xref target="RFC8203">Shutdown Communication</xref> to inform the remote side on the nature and duration of the maintenance activities.
+                        Initiators of the administrative shutdown MAY consider using <xref target="I-D.ietf-grow-bgp-gshut">Graceful Shutdown</xref> to facilitate smooth drainage of traffic prior to session tear down, and the <xref target="RFC8203">Shutdown Communication</xref> to inform the remote side on the nature and duration of the maintenance activities.
                     </t>
                 </section>
             </section>
