@@ -150,7 +150,7 @@
                     Such culling of control-plane traffic will preempt the loss of end-user traffic, by causing the expiration of BGP Hold Timers ahead of the moment where the expiration would occur without intervention from the fabric's Caretaker.
                 </t>
                 <t>
-                    In this scenario, BGP Session Culling is accomplished as described in the next sub-section, through the application of a combined layer-3 and layer-4 packet filter deployed in the Caretaker's lower layer network.
+                    In this scenario, BGP Session Culling is accomplished as described in the next sub-section, through the application of a combined layer-3 and layer-4 packet filter deployed in the Caretaker's switched fabric.
                 </t>
                 <section title="Packet Filter Considerations">
                     <t>
