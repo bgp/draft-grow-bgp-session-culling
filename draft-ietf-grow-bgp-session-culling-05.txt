@@ -5,16 +5,16 @@
 Global Routing Operations                                    W. Hargrave
 Internet-Draft                                                     LONAP
 Intended status: Best Current Practice                       M. Griswold
-Expires: March 14, 2018                                              20C
+Expires: April 1, 2018                                               20C
                                                              J. Snijders
                                                                      NTT
                                                              N. Hilliard
                                                                     INEX
-                                                      September 10, 2017
+                                                      September 28, 2017
 
 
  Mitigating Negative Impact of Maintenance through BGP Session Culling
-                 draft-ietf-grow-bgp-session-culling-04
+                 draft-ietf-grow-bgp-session-culling-05
 
 Abstract
 
@@ -33,14 +33,14 @@ Status of This Memo
    Internet-Drafts are working documents of the Internet Engineering
    Task Force (IETF).  Note that other groups may also distribute
    working documents as Internet-Drafts.  The list of current Internet-
-   Drafts is at https://datatracker.ietf.org/drafts/current/.
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
 
    Internet-Drafts are draft documents valid for a maximum of six months
    and may be updated, replaced, or obsoleted by other documents at any
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 14, 2018.
+   This Internet-Draft will expire on April 1, 2018.
 
 Copyright Notice
 
@@ -49,11 +49,11 @@ Copyright Notice
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents
-   (https://trustee.ietf.org/license-info) in effect on the date of
+   (http://trustee.ietf.org/license-info) in effect on the date of
 
 
 
-Hargrave, et al.         Expires March 14, 2018                 [Page 1]
+Hargrave, et al.          Expires April 1, 2018                 [Page 1]
 
 Internet-Draft             BGP Session Culling            September 2017
 
@@ -81,11 +81,11 @@ Table of Contents
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
    7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   6
      7.1.  Normative References  . . . . . . . . . . . . . . . . . .   6
-     7.2.  Informative References  . . . . . . . . . . . . . . . . .   6
+     7.2.  Informative References  . . . . . . . . . . . . . . . . .   7
    Appendix A.  Example packet filters . . . . . . . . . . . . . . .   7
      A.1.  Cisco IOS, IOS XR & Arista EOS Firewall Example
            Configuration . . . . . . . . . . . . . . . . . . . . . .   7
-     A.2.  Nokia SR OS Filter Example Configuration  . . . . . . . .   7
+     A.2.  Nokia SR OS Filter Example Configuration  . . . . . . . .   8
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
 
 1.  Introduction
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Hargrave, et al.         Expires March 14, 2018                 [Page 2]
+Hargrave, et al.          Expires April 1, 2018                 [Page 2]
 
 Internet-Draft             BGP Session Culling            September 2017
 
@@ -118,13 +118,13 @@ Internet-Draft             BGP Session Culling            September 2017
    as much as 15 minutes when a router with a slow control-plane is
    receiving a full set of Internet routes.
 
-   Throughout this document the "Caretaker" is defined to be the
-   operator of the lower layer network, while "Operators" directly
-   administrate the BGP speakers.  Operators and Caretakers implementing
-   BGP Session Culling are encouraged to avoid using a fixed grace
-   period, but instead monitor forwarding plane activity while the
-   culling is taking place and consider it complete once traffic levels
-   have dropped to a minimum (Section 3.3).
+   Throughout this document the "Caretaker" is defined to be in control
+   of the lower layer network, while "Operators" directly administrate
+   the BGP speakers.  Operators and Caretakers implementing BGP Session
+   Culling are encouraged to avoid using a fixed grace period, but
+   instead monitor forwarding plane activity while the culling is taking
+   place and consider it complete once traffic levels have dropped to a
+   minimum (Section 3.3).
 
 2.  Requirements Language
 
@@ -134,8 +134,8 @@ Internet-Draft             BGP Session Culling            September 2017
 
 3.  BGP Session Culling
 
-   From the viewpoint of the IP network operator, there are two types of
-   BGP Session Culling:
+   From the viewpoint of the Operator, there are two types of BGP
+   Session Culling:
 
    Voluntary BGP Session Teardown:  The Operator initiates the tear down
       of the potentially affected BGP session by issuing an
@@ -149,13 +149,13 @@ Internet-Draft             BGP Session Culling            September 2017
 3.1.  Voluntary BGP Session Teardown Recommendations
 
    Before an Operator commences activities which can cause disruption to
-   the flow of data through the lower layer network, an operator can
+   the flow of data through the lower layer network, an Operator can
    reduce loss of traffic by issuing an administrative shutdown to all
    BGP sessions running across the lower layer network and wait a few
    minutes for data-plane traffic to subside.
 
    While architectures exist to facilitate quick network reconvergence
-   (such as BGP PIC [I-D.ietf-rtgwg-bgp-pic]), an operator cannot assume
+   (such as BGP PIC [I-D.ietf-rtgwg-bgp-pic]), an Operator cannot assume
    the remote side has such capabilities.  As such, a grace period
    between the Administrative Shutdown and the impacting maintenance
    activities is warranted.
@@ -165,22 +165,22 @@ Internet-Draft             BGP Session Culling            September 2017
 
 
 
-Hargrave, et al.         Expires March 14, 2018                 [Page 3]
+Hargrave, et al.          Expires April 1, 2018                 [Page 3]
 
 Internet-Draft             BGP Session Culling            September 2017
 
 
-   After the maintenance activities have concluded, the operator is
+   After the maintenance activities have concluded, the Operator is
    expected to restore the BGP sessions to their original Administrative
    state.
 
 3.1.1.  Maintenance Considerations
 
-   Initiators of the administrative shutdown could consider using
-   Graceful Shutdown [I-D.ietf-grow-bgp-gshut] to facilitate smooth
-   drainage of traffic prior to session tear down, and the Shutdown
-   Communication [I-D.ietf-idr-shutdown] to inform the remote side on
-   the nature and duration of the maintenance activities.
+   Initiators of the administrative shutdown MAY consider using Graceful
+   Shutdown [I-D.ietf-grow-bgp-gshut] to facilitate smooth drainage of
+   traffic prior to session tear down, and the Shutdown Communication
+   [RFC8203] to inform the remote side on the nature and duration of the
+   maintenance activities.
 
 3.2.  Involuntary BGP Session Teardown Recommendations
 
@@ -189,14 +189,14 @@ Internet-Draft             BGP Session Culling            September 2017
    seen at Internet Exchange Points (IXPs), different operational
    considerations can apply.
 
-   Operational experience shows many network operators are unable to
-   carry out the Voluntary BGP Session Teardown recommendations, because
-   of the operational cost and risk of co-ordinating the two
-   configuration changes required.  This has an adverse affect on
-   Internet performance.
+   Operational experience shows many Operators are unable to carry out
+   the Voluntary BGP Session Teardown recommendations, because of the
+   operational cost and risk of coordinating the two configuration
+   changes required.  This has an adverse affect on Internet
+   performance.
 
-   In the absence notifications from the lower layer (e.g. ethernet link
-   down) consistent with the planned maintenance activities in a
+   In the absence of notifications from the lower layer (e.g.  Ethernet
+   link down) consistent with the planned maintenance activities in a
    switched layer-2 fabric, the Caretaker of the fabric could choose to
    cull BGP sessions on behalf of the Operators connected to the fabric.
 
@@ -205,35 +205,37 @@ Internet-Draft             BGP Session Culling            September 2017
    the moment where the expiration would occur without intervention from
    the fabric's Caretaker.
 
-   In this scenario, BGP Session Culling is accomplished through the
-   application of a combined layer-3 and layer-4 packet filter deployed
-   in the switched fabric itself.
+   In this scenario, BGP Session Culling is accomplished as described in
+   the next sub-section, through the application of a combined layer-3
+   and layer-4 packet filter deployed in the Caretaker's switched
+   fabric.
 
 3.2.1.  Packet Filter Considerations
 
-   The following considerations apply to the packet filter design:
+   The peering LAN prefixes used by the IXP form the control plane, and
+   following considerations apply to the packet filter design:
 
    o  The packet filter MUST only affect BGP traffic specific to the
       layer-2 fabric, i.e. forming part of the control plane of the
-      system described, rather than multihop BGP traffic which merely
-      transits
 
 
 
 
-Hargrave, et al.         Expires March 14, 2018                 [Page 4]
+Hargrave, et al.          Expires April 1, 2018                 [Page 4]
 
 Internet-Draft             BGP Session Culling            September 2017
 
 
-   o  The packet filter MUST only affect BGP, i.e. TCP/179
+      system described, rather than multihop BGP traffic which merely
+      transits.
+
+   o  The packet filter MUST only affect BGP, i.e. TCP/179.
 
    o  The packet filter SHOULD make provision for the bidirectional
       nature of BGP, i.e. that sessions may be established in either
-      direction
+      direction.
 
-   o  The packet filter MUST affect all relevant Address Family
-      Identifiers.
+   o  The packet filter MUST affect all Address Family Identifiers.
 
    Appendix A contains examples of correct packet filters for various
    platforms.
@@ -247,40 +249,41 @@ Internet-Draft             BGP Session Culling            September 2017
    unexpected results.  These problems may include:
 
    o  Platform inability to apply layer 3/4 filters on ports which
-      already have layer 2 filters applied
+      already have layer 2 filters applied.
 
-   o  Layer 3/4 filters supported for IPv4 but not for IPv6
+   o  Layer 3/4 filters supported for IPv4 but not for IPv6.
 
    o  Layer 3/4 filters supported on physical ports, but not on 802.3ad
-      Link Aggregate ports
+      Link Aggregate ports.
 
-   o  Failure of the operator to apply filters to all 802.3ad Link
-      Aggregate ports
+   o  Failure of the Caretaker to apply filters to all 802.3ad Link
+      Aggregate ports.
 
    o  Limitations in ACL hardware mechanisms causing filters not to be
-      applied
+      applied.
 
    o  Fragmentation of ACL lookup memory causing transient ACL
       application problems which are resolved after ACL removal /
-      reapplication
+      reapplication.
 
    o  Temporary service loss during hardware programming
 
    o  Reduction in hardware ACL capacity if the platform enables
-      lossless ACL application
+      lossless ACL application.
 
-   It is advisable for the operator to be aware of the limitations of
+   It is advisable for the Caretaker to be aware of the limitations of
    their hardware, and to thoroughly test all complicated configurations
-   in advance to ensure that problems don't occur during production
-   deployments.
 
 
 
 
-Hargrave, et al.         Expires March 14, 2018                 [Page 5]
+Hargrave, et al.          Expires April 1, 2018                 [Page 5]
 
 Internet-Draft             BGP Session Culling            September 2017
 
+
+   in advance to ensure that problems don't occur during production
+   deployments.
 
 3.3.  Procedural Considerations
 
@@ -291,7 +294,7 @@ Internet-Draft             BGP Session Culling            September 2017
    It is recommended that the packet filters are only deployed for the
    duration of the maintenance and immediately removed after the
    maintenance.  To prevent unnecessarily troubleshooting, it is
-   RECOMMENDED that Caretakers notify the affected operators before the
+   RECOMMENDED that Caretakers notify the affected Operators before the
    maintenance takes place, and make it explicit that the Involuntary
    BGP Session Culling methodology will be applied.
 
@@ -300,7 +303,8 @@ Internet-Draft             BGP Session Culling            September 2017
    The authors would like to thank the following people for their
    contributions to this document: Saku Ytti, Greg Hankins, James
    Bensley, Wolfgang Tremmel, Daniel Roesen, Bruno Decraene, Tore
-   Anderson, John Heasley and Warren Kumari.
+   Anderson, John Heasley, Warren Kumari, Stig Venaas, and Brian
+   Carpenter.
 
 5.  Security Considerations
 
@@ -316,50 +320,50 @@ Internet-Draft             BGP Session Culling            September 2017
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/info/rfc2119>.
+              DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
+              editor.org/info/rfc2119>.
 
    [RFC4271]  Rekhter, Y., Ed., Li, T., Ed., and S. Hares, Ed., "A
               Border Gateway Protocol 4 (BGP-4)", RFC 4271,
-              DOI 10.17487/RFC4271, January 2006,
-              <https://www.rfc-editor.org/info/rfc4271>.
+              DOI 10.17487/RFC4271, January 2006, <https://www.rfc-
+              editor.org/info/rfc4271>.
+
+
+
+
+
+
+Hargrave, et al.          Expires April 1, 2018                 [Page 6]
+
+Internet-Draft             BGP Session Culling            September 2017
+
 
 7.2.  Informative References
 
    [I-D.ietf-grow-bgp-gshut]
               Francois, P., Decraene, B., Pelsser, C., Patel, K., and C.
               Filsfils, "Graceful BGP session shutdown", draft-ietf-
-              grow-bgp-gshut-09 (work in progress), July 2017.
+              grow-bgp-gshut-11 (work in progress), September 2017.
 
-
-
-Hargrave, et al.         Expires March 14, 2018                 [Page 6]
-
-Internet-Draft             BGP Session Culling            September 2017
-
-
-   [I-D.ietf-idr-shutdown]
-              Snijders, J., Heitz, J., and J. Scudder, "BGP
-              Administrative Shutdown Communication", draft-ietf-idr-
-              shutdown-10 (work in progress), June 2017.
+   [RFC8203]  Snijders, J., Heitz, J., and J. Scudder, "BGP
+              Administrative Shutdown Communication", RFC 8203,
+              DOI 10.17487/RFC8203, July 2017, <https://www.rfc-
+              editor.org/info/rfc8203>.
 
    [I-D.ietf-rtgwg-bgp-pic]
               Bashandy, A., Filsfils, C., and P. Mohapatra, "BGP Prefix
               Independent Convergence", draft-ietf-rtgwg-bgp-pic-05
               (work in progress), May 2017.
 
-7.3.  URIs
-
-   [1] https://github.com/bgp/bgp-session-culling-config-examples
-
 Appendix A.  Example packet filters
 
    Example packet filters for "Involuntary BGP Session Teardown" at an
-   IXP with LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64.
+   IXP using peering LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64 as
+   its control plane.
 
    A repository of configuration examples for a number of assorted
-   platforms can be found at github.com/bgp/bgp-session-culling-config-
-   examples [1].
+   platforms can be found at https://github.com/bgp/bgp-session-culling-
+   config-examples .
 
 A.1.  Cisco IOS, IOS XR & Arista EOS Firewall Example Configuration
 
@@ -379,20 +383,18 @@ A.1.  Cisco IOS, IOS XR & Arista EOS Firewall Example Configuration
       ipv6 access-group acl-ipv6-permit-all-except-bgp in
    !
 
-A.2.  Nokia SR OS Filter Example Configuration
 
 
 
 
 
 
-
-
-
-Hargrave, et al.         Expires March 14, 2018                 [Page 7]
+Hargrave, et al.          Expires April 1, 2018                 [Page 7]
 
 Internet-Draft             BGP Session Culling            September 2017
 
+
+A.2.  Nokia SR OS Filter Example Configuration
 
    ip-filter 10 create
        filter-name "ACL IPv4 Permit All Except BGP"
@@ -434,6 +436,20 @@ Internet-Draft             BGP Session Culling            September 2017
 
 Authors' Addresses
 
+
+
+
+
+
+
+
+
+
+Hargrave, et al.          Expires April 1, 2018                 [Page 8]
+
+Internet-Draft             BGP Session Culling            September 2017
+
+
    Will Hargrave
    LONAP Ltd
    5 Fleet Place
@@ -441,13 +457,6 @@ Authors' Addresses
    United Kingdom
 
    Email: will@lonap.net
-
-
-
-
-Hargrave, et al.         Expires March 14, 2018                 [Page 8]
-
-Internet-Draft             BGP Session Culling            September 2017
 
 
    Matt Griswold
@@ -492,13 +501,4 @@ Internet-Draft             BGP Session Culling            September 2017
 
 
 
-
-
-
-
-
-
-
-
-
-Hargrave, et al.         Expires March 14, 2018                 [Page 9]
+Hargrave, et al.          Expires April 1, 2018                 [Page 9]
