@@ -154,7 +154,7 @@
                 </t>
                 <section title="Packet Filter Considerations">
                     <t>
-                        The LAN prefixes used by the IXP form the control plane, and following considerations apply to the packet filter design:
+                        The peering LAN prefixes used by the IXP form the control plane, and following considerations apply to the packet filter design:
                         <list style="symbols">
                             <t>
                                 The packet filter MUST only affect BGP traffic specific to the layer-2 fabric, i.e. forming part of the control plane of the system described, rather than multihop BGP traffic which merely transits.
@@ -253,7 +253,7 @@
 
         <section anchor="acl1" title="Example packet filters">
             <t>
-                Example packet filters for "Involuntary BGP Session Teardown" at an IXP using LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64 as its control plane.
+                Example packet filters for "Involuntary BGP Session Teardown" at an IXP using peering LAN prefixes 192.0.2.0/24 and 2001:db8:2::/64 as its control plane.
             </t>
             <t>
                 A repository of configuration examples for a number of assorted platforms can be found at <eref target="https://github.com/bgp/bgp-session-culling-config-examples">https://github.com/bgp/bgp-session-culling-config-examples</eref>.
